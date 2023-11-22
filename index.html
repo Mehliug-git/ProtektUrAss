@@ -1,0 +1,175 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' blob: filesystem: 'unsafe-inline';">
+</head>
+
+<body>
+    <div class="container">
+        <div id="customSwitch" class="switch">
+            <div class="toggle-button">
+                <div class="toggle"></div>
+                <div class="moon-mask"></div>
+                <div class="circles-wrapper">
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                </div>
+            </div>
+        </div>
+        <div class="text">
+            <p>n</p>
+            <p>ff</p>
+        </div>
+    </div>
+    
+
+    <style>
+        /* ***** Colors - Start ***** */
+        :root {
+            --black: #111;
+            --yellow: #fdb813;
+            --grey: #514e4b;
+            --white: #fff;
+        }
+
+        /* ***** Colors - End ***** */
+
+        /* ***** Global Styles - Start ***** */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body {
+            background-color: var(--yellow);
+            height: 100vh;
+            margin: 0;
+            width: 100vh;
+        }
+
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* ***** Global Styles - End ***** */
+
+        /* ***** Specific Styles - Start ***** */
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .switch {
+            width: 60px;
+            height: 110px;
+            padding-top: 2px;
+            background-color: var(--grey);
+            border-radius: 40px;
+            cursor: pointer;
+            outline: none;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .toggle-button {
+            transform: scale(0.8);
+            transform-origin: center center;
+        }
+
+        .toggle {
+            position: relative;
+            width: 35px;
+            height: 35px;
+            margin: 12px;
+            margin-top: 12px;
+            background-color: var(--yellow);
+            border-radius: 50%;
+        }
+
+        .moon-mask {
+            position: absolute;
+            width: 35px;
+            height: 35px;
+            margin: -74px 0 0 34px;
+            background-color: var(--grey);
+            border-radius: 50%;
+        }
+
+        .circles-wrapper .circle {
+            position: absolute;
+            width: 4px;
+            height: 8px;
+            background-color: var(--white);
+            border-radius: 10px;
+        }
+
+        .circles-wrapper .circle:first-child {
+            margin: -57px 0 0 27px;
+        }
+
+        .circles-wrapper .circle:nth-child(2) {
+            margin: -9px 0 0 28px;
+        }
+
+        .circles-wrapper .circle:nth-child(3) {
+            margin: -32px 0 0 51px;
+            transform: rotate(90deg);
+        }
+
+        .circles-wrapper .circle:nth-child(4) {
+            margin: -33px 0 0 4px;
+            transform: rotate(90deg);
+        }
+
+        .circles-wrapper .circle:nth-child(5) {
+            margin: -14px 0 0 10px;
+            transform: rotate(45deg);
+        }
+
+        .circles-wrapper .circle:nth-child(6) {
+            margin: -14px 0 0 45px;
+            transform: rotate(320deg);
+        }
+
+        .circles-wrapper .circle:nth-child(7) {
+            margin: -50px 0 0 10px;
+            transform: rotate(135deg);
+        }
+
+        .circles-wrapper .circle:nth-child(8) {
+            margin: -50px 0 0 45px;
+            transform: rotate(235deg);
+        }
+
+        .text p {
+            margin-left: 5px;
+            font-size: 55px;
+            line-height: 1.1;
+            font-weight: 700;
+        }
+
+        /* ***** Specific Styles - End ***** */
+    </style>
+    <!-- For the extention -->
+    <script src="popup.js"></script>
+    <!-- cloudflare import for CSS -->
+    <script src="gsap.min.js"></script>
+    <!-- For the switch button -->
+    <script src="switch.js"></script>
+
+
+</body>
+
+</html>

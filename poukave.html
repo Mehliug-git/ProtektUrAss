@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Poukave page</title>
+    </head>
+    <body>
+        <ul id="browser-info"></ul>
+        <script>
+            const browserInfo = document.getElementById("browser-info");
+            for (const property in navigator) {
+                const li = document.createElement("li");
+                li.textContent = `${property}: ${navigator[property]}`;
+                browserInfo.appendChild(li);
+            }
+        </script>
+    </body>
+</html>
