@@ -104,7 +104,8 @@ function setNavigatorProperty(propertyName, propertyValue) {
 // Launch all functions
 function launch() {
   // Make a list with all important navigator properties
-  var funct_list = ["userAgent", "platform", "appCodeName", "appVersion", "appName", "gpu"];
+  var funct_list = ["userAgent", "platform", "appCodeName", "appVersion", "appName", "gpu", "plugins", "language", "doNotTrack", "cookieEnabled", "hardwareConcurrency"];
+
   var value = "BOOM";
 
   // For each function in the list
