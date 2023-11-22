@@ -1,39 +1,12 @@
 let webRequestListener;
 
-
-function reloadOnce() {
-  // Vérifie si le cookie indiquant le rechargement existe
-  var hasReloaded = document.cookie.replace(/(?:(?:^|.*;\s*)hasReloaded\s*=\s*([^;]*).*$)|^.*$/, '$1');
-
-  // Si le cookie n'existe pas, effectue le rechargement, crée le cookie avec expiration de 10 secondes
-  if (!hasReloaded) {
-    window.location.reload();
-    console.log('RELOAD');
-
-    
-    var expirationDate = new Date();
-    expirationDate.setTime(expirationDate.getTime() + 10000); // 10 secondes en millisecondes
-    document.cookie = "hasReloaded=true; expires=" + expirationDate.toUTCString() + "; path=/";
-  }
-  else {
-    console.log('NO RELOAD');
-  }
-}
-
-
 function performActionBasedOnSwitchState(isSwitchOn) {
   if (isSwitchOn) {
       // Si le switch est ON
       console.log('Switch is ON. LETZ GOOOOOOOOOOOOOOOOOOOO');
-      //document.body.innerHTML = '<p>HEHEHE</p>';
+      //start all function
+      launch()
 
-      //start function 1 
-      setUserAgent('truc de zinzin');
-
-
-
-      //reload page for take effect
-     // reloadOnce();
   } else {
     //bah s'il l'est pas connard
       console.log('Switch is OFF');
@@ -56,12 +29,15 @@ function handleMessage(request) {
     chrome.storage.local.set({ 'etat_switch': request.etat_switch });
 
     if (request.etat_switch) {
-      // If checkbox is checked
+      // If checkbox is checked ONLY WHEN USER CLICK !!
       console.log('CHECKED // ON');
+      launch();
+      window.location.reload();
 
     } else {
       // If checkbox is checked
       console.log('NOT CHECKED // OFF');
+      window.location.reload();
     }
   }
 }
@@ -104,15 +80,46 @@ function setUserAgent(userAgent) {
   });
 }
 
+//Funciton for change navigator properties  
+function setNavigatorProperty(propertyName, propertyValue) {
+  Object.defineProperty(navigator, propertyName, {
+    value: propertyValue,
+    writable: false,
+    configurable: false,
+    enumerable: true
+  });
 
-// Crée un élément script
-var script = document.createElement('script');
+  // Crée un nouvel objet avec la propriété spécifiée pour navigator
+  window.navigator = Object.create(navigator, {
+    [propertyName]: {
+      value: propertyValue,
+      writable: false,
+      configurable: false,
+      enumerable: true
+    }
+  });
+}
 
-// Ajoute le code du script
-script.textContent = '(' + setUserAgent.toString() + ')("Votre chaîne de User-Agent personnalisée");';
 
-// Ajoute le script à la page
-(document.head || document.documentElement).appendChild(script);
+// Launch all functions
+function launch() {
+  // Make a list with all important navigator properties
+  var funct_list = ["userAgent", "platform", "appCodeName", "appVersion", "appName", "gpu"];
+  var value = "BOOM";
 
-// Supprime l'élément script pour éviter tout impact sur la page
-script.parentNode.removeChild(script);
+  // For each function in the list
+  funct_list.forEach(function(funct) {
+    // Crée un nouvel élément script
+    var script = document.createElement('script');
+
+    // Ajoute le code du script
+    script.textContent = '(' + setNavigatorProperty.toString() + ')("' + funct + '", "' + value + '");';
+
+    // Ajoute le script à la page
+    (document.head || document.documentElement).appendChild(script);
+
+    // Supprime l'élément script pour éviter tout impact sur la page
+    script.parentNode.removeChild(script);
+  });
+}
+
