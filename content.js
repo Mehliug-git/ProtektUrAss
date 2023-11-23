@@ -4,8 +4,14 @@ function performActionBasedOnSwitchState(isSwitchOn) {
   if (isSwitchOn) {
       // Si le switch est ON
       console.log('Switch is ON. LETZ GOOOOOOOOOOOOOOOOOOOO');
+
       //start all function
       launch()
+
+      //change useragent from Header
+      // Call the funciton in background.js
+      chrome.runtime.sendMessage({ action: 'BackgroundFunction' });
+
 
   } else {
     //bah s'il l'est pas connard
@@ -32,12 +38,12 @@ function handleMessage(request) {
       // If checkbox is checked ONLY WHEN USER CLICK !!
       console.log('CHECKED // ON');
       launch();
-      window.location.reload();
+      window.location.reload(true);
 
     } else {
       // If checkbox is checked
       console.log('NOT CHECKED // OFF');
-      window.location.reload();
+      window.location.reload(true);
     }
   }
 }
@@ -99,7 +105,6 @@ function setNavigatorProperty(propertyName, propertyValue) {
     }
   });
 }
-
 
 // Launch all functions
 function launch() {
