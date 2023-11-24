@@ -16,6 +16,10 @@ function performActionBasedOnSwitchState(isSwitchOn) {
   } else {
     //bah s'il l'est pas connard
       console.log('Switch is OFF');
+
+      //stop listener 
+      chrome.runtime.sendMessage({ action: 'StopListening' });
+
   }
 }
 
@@ -66,7 +70,7 @@ if (chrome.tabs) {
 
 // FONCTION FOR THIS BROKEN SHITTY CODE SRX JVAI CLAQUER 
 
-//Change useragent
+//Change useragent in JS
 function setUserAgent(userAgent) {
   Object.defineProperty(navigator, 'userAgent', {
     value: userAgent,

@@ -6,6 +6,7 @@ chrome.runtime.onInstalled.addListener(function() {
 });
 */
 
+
 // for listen if BackgroundFunction is called from content.js
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if (request.action === 'BackgroundFunction') {
@@ -13,6 +14,15 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       changeHeader();
   }
 });
+
+// for stop listener
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+  if (request.action === 'StopListening') {
+      // when BackgroundFunction is call from content.js :
+      stopListening();
+  }
+});
+
 
 function changeHeader() {
 
@@ -44,7 +54,9 @@ function changeHeader() {
 
 }
 
-
+function stopListening() {
+  chrome.webRequest.onBeforeSendHeaders.removeListener(onRequestHeaders);
+}
 
 
 
