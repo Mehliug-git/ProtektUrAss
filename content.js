@@ -1,24 +1,24 @@
-let webRequestListener;
 
 function performActionBasedOnSwitchState(isSwitchOn) {
-  if (isSwitchOn) {
-      // Si le switch est ON
-      console.log('Switch is ON. LETZ GOOOOOOOOOOOOOOOOOOOO');
-
+  if (isSwitchOn == true) {
+    // Si le switch est ON
+    console.log('Switch is ON. LETZ GOOOOOOOOOOOOOOOOOOOO');
       //start all function
-      launch()
+    launch()
 
-      //change useragent from Header
-      // Call the funciton in background.js
-      chrome.runtime.sendMessage({ action: 'BackgroundFunction' });
+    //change useragent from Header
+    // Call the funciton in background.js
+    chrome.runtime.sendMessage({ action: 'BackgroundFunction' }, function(response) {
+      console.log('Response from background.js:', response);
+    });
 
-
+    //delete cookies
+    document.cookie.split(";").forEach(function(c) {
+      document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+    });
   } else {
     //bah s'il l'est pas connard
-      console.log('Switch is OFF');
-
-      //stop listener 
-      chrome.runtime.sendMessage({ action: 'StopListening' });
+    console.log('Switch is OFF');
 
   }
 }
@@ -41,12 +41,12 @@ function handleMessage(request) {
     if (request.etat_switch) {
       // If checkbox is checked ONLY WHEN USER CLICK !!
       console.log('CHECKED // ON');
-      launch();
+      //reload for take effect
       window.location.reload(true);
-
     } else {
       // If checkbox is checked
       console.log('NOT CHECKED // OFF');
+      //reload for take effect
       window.location.reload(true);
     }
   }
