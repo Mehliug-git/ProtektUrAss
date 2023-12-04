@@ -20,6 +20,11 @@ function performActionBasedOnSwitchState(isSwitchOn) {
     //bah s'il l'est pas connard
     console.log('Switch is OFF');
 
+    chrome.runtime.sendMessage({ action: 'StopBackgroundFunction' }, function(response) {
+      console.log('Response from background.js:', response);
+    });
+
+
   }
 }
 
