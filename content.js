@@ -75,26 +75,6 @@ if (chrome.tabs) {
 
 // FONCTION FOR THIS BROKEN SHITTY CODE SRX JVAI CLAQUER 
 
-//Change useragent in JS
-function setUserAgent(userAgent) {
-  Object.defineProperty(navigator, 'userAgent', {
-    value: userAgent,
-    writable: false,
-    configurable: false,
-    enumerable: true
-  });
-
-  // Crée un nouvel objet avec la propriété userAgent pour navigator
-  window.navigator = Object.create(navigator, {
-    userAgent: {
-      value: userAgent,
-      writable: false,
-      configurable: false,
-      enumerable: true
-    }
-  });
-}
-
 //Funciton for change navigator properties  
 function setNavigatorProperty(propertyName, propertyValue) {
   Object.defineProperty(navigator, propertyName, {
