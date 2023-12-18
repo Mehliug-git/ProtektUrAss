@@ -20,7 +20,7 @@ const animate = gsap.timeline({ paused: false });
         if(toggle){
             animate.restart();
             animateBackground.restart();
-            //test ison = true
+
         } else {
             animate.reverse();
             animateBackground.reverse();

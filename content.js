@@ -16,6 +16,7 @@ function performActionBasedOnSwitchState(isSwitchOn) {
     document.cookie.split(";").forEach(function(c) {
       document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
     });
+
   } else {
     //bah s'il l'est pas connard
     console.log('Switch is OFF');
@@ -23,10 +24,9 @@ function performActionBasedOnSwitchState(isSwitchOn) {
     chrome.runtime.sendMessage({ action: 'StopBackgroundFunction' }, function(response) {
       console.log('Response from background.js:', response);
     });
-
-
   }
 }
+
 
 // Récupérez l'état du switch depuis le stockage local
 chrome.storage.local.get('etat_switch', function(data) {
@@ -35,7 +35,6 @@ chrome.storage.local.get('etat_switch', function(data) {
   // Exécutez les actions en fonction de l'état du switch
   performActionBasedOnSwitchState(isSwitchOn);
 });
-
 
 // Function for knowing if the checkbox is checked on the active page 
 function handleMessage(request) {
@@ -100,7 +99,7 @@ function launch() {
   // Make a list with all important navigator properties
   var funct_list = ["userAgent", "platform", "appCodeName", "appVersion", "appName", "gpu", "plugins", "language", "doNotTrack", "cookieEnabled", "hardwareConcurrency"];
 
-  var value = "BOOM";
+  var value = "💀💀💀";
 
   // For each function in the list
   funct_list.forEach(function(funct) {

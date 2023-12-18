@@ -1,8 +1,8 @@
 {
     "manifest_version": 2,
-    "name": "Mescouilles User Agent Switcher",
+    "name": "ProtektUrAss",
     "version": "1.0",
-    "description": "en sah ça peux être pas mal",
+    "description": "Ouais on verra ca plus tard.",
     "permissions": [
       "activeTab",
       "storage",
