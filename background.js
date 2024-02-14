@@ -1,5 +1,13 @@
-//Voir aussi pour mettre un mode troll pour pouvoir mettre des trucs a la con dedans genre changer tout les headers par des nom random
-//tfacon s'il sont pas OK je le   fait en soumsoum 
+// Voir aussi pour mettre un mode troll pour pouvoir mettre des trucs a la con dedans genre changer tout les headers par des nom random
+// tfacon s'il sont pas OK je le   fait en soumsoum 
+/*
+NOTES 
+
+J'ai fait en sorte que le useragent soit proche de celui déjà used 
+
+JS entities en cours de build UA OK
+
+*/
 
 let webRequestListener;
 
@@ -12,35 +20,59 @@ chrome.runtime.onInstalled.addListener(function() {
 
 //un jour j'arriverai à coder cette merde 
 
-// for listen if BackgroundFunction is call from content.js
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-  if (request.action === 'BackgroundFunction') {
 
-      // Add changeHeaderListener listener for change header tdc
-      chrome.webRequest.onBeforeSendHeaders.addListener(
-        changeHeaderListener,
-        { urls: ["<all_urls>"] },
-        ["blocking", "requestHeaders"]
-      );   
-      sendResponse({ message: 'Header changed successfully !' });
-            
-  }
-  else if (request.action === 'StopBackgroundFunction') {
-
-    chrome.webRequest.onBeforeSendHeaders.removeListener(changeHeaderListener);
-    sendResponse({ message: 'Header reset successfully !' });
-  }
-});
-
-
+// declaration en globale pour pas que il soit limiter au bloc et pouvoir le renvoyer dans la console user
+let randomUserAgent
+let BaseOS
+let final
 
 // listen event webRequest for intercept request
 let changeHeaderListener = function(details) {
+
     // Modifie le User-Agent dans les en-têtes de la requête
     for (var i = 0; i < details.requestHeaders.length; ++i) {
+
+      // definie dans une var l'actuel type de device pour changement header cohérent
+      if (details.requestHeaders[i].name === 'sec-ch-ua-platform') {
+
+        if (details.requestHeaders[i].value === 'Windows') {
+          BaseOS = "PC";
+        }
+
+        if (details.requestHeaders[i].value === 'Linux') {
+          BaseOS = "PC";
+        }
+
+        if (details.requestHeaders[i].value === 'macOS') {
+          BaseOS = "PC";
+        }
+
+        if (details.requestHeaders[i].value === 'iOS') {
+          BaseOS = "Phone";
+        }
+
+        
+        if (details.requestHeaders[i].value === 'Android') {
+          BaseOS = "Phone";
+        }
+
+        else {
+          BaseOS = "PC";
+        }
+
+        //For OS detection
+        const os_list = ["Android", "Chrome OS", "Chromium OS", "iOS", "macOS", "Windows", "Unknown"]; //tout sauf linux casse les couilles 
+        var randomOS = Math.floor(Math.random() * os_list.length);
+        details.requestHeaders[i].value = os_list[randomOS];
+        
+      }
+
+
+
       //For useragent
       if (details.requestHeaders[i].name === 'User-Agent') {
-        const userAgent_list = [
+
+        const PCsuserAgent_list = [
         //Windows
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36 Edg/119.0.0.0	",
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
@@ -58,7 +90,6 @@ let changeHeaderListener = function(details) {
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36",
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36",
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36",
-
         //Linux
         "Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/119.0",
         "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/113.0",
@@ -75,7 +106,10 @@ let changeHeaderListener = function(details) {
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36",
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Safari/605.1.1",
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/601.3.9 (KHTML, like Gecko) Version/9.0.2 Safari/601.3.9",
-        //Iphone X
+        ]
+
+        const PhoneuserAgent_list = [
+          //Iphone X
         "Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1",
         // Samsung Galaxy S22 5G
         'Mozilla/5.0 (Linux; Android 13; SM-S901B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Mobile Safari/537.36',
@@ -100,7 +134,9 @@ let changeHeaderListener = function(details) {
         // Huawei P30 lite
         'Mozilla/5.0 (Linux; Android 10; MAR-LX1A) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Mobile Safari/537.36',
         // OnePlus Nord N200 5G
-        'Mozilla/5.0 (Linux; Android 12; DE2118) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Mobile Safari/537.36',
+        'Mozilla/5.0 (Linux; Android 12; DE2118) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Mobile Safari/537.36']
+
+        const OtheruserAgent_list = [
         // Amazon Kindle 4
         'Mozilla/5.0 (X11; U; Linux armv7l like Android; en-us) AppleWebKit/531.2+ (KHTML, like Gecko) Version/5.0 Safari/533.2+ Kindle/3.0+',
         // Amazon Kindle 3
@@ -125,7 +161,6 @@ let changeHeaderListener = function(details) {
         'AppleTV6,2/11.1',
         // Apple TV 4th Gen
         'AppleTV5,3/9.1.1',
-        // Game Consoles User Agents
         // Playstation 5
         'Mozilla/5.0 (PlayStation; PlayStation 5/2.26) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0 Safari/605.1.15',
         // Playstation 4
@@ -139,7 +174,9 @@ let changeHeaderListener = function(details) {
         // Nintendo Wii U
         'Mozilla/5.0 (Nintendo WiiU) AppleWebKit/536.30 (KHTML, like Gecko) NX/3.0.4.2.12 NintendoBrowser/4.3.1.11264.US',
         // Nintendo 3DS
-        'Mozilla/5.0 (Nintendo 3DS; U; ; en) Version/1.7412.EU',
+        'Mozilla/5.0 (Nintendo 3DS; U; ; en) Version/1.7412.EU']
+
+        const BotsuserAgent_list = [
         // Google bot
         'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
         // Bing bot
@@ -147,30 +184,51 @@ let changeHeaderListener = function(details) {
         // Yahoo! bot
         'Mozilla/5.0 (compatible; Yahoo! Slurp; http://help.yahoo.com/help/us/ysearch/slurp)'
         ];
+
+        if (BaseOS === undefined) {
+          BaseOS = "PC";
+          console.log("OS de base non détecté, OS par défaut : PC")
+        }
         
-        var randomUserAgent = Math.floor(Math.random() * userAgent_list.length);
-        details.requestHeaders[i].value = userAgent_list[randomUserAgent];
+        if (BaseOS === "PC") {
+          randomUserAgent = Math.floor(Math.random() * PCsuserAgent_list.length);
+          //pour utiliser sa valeure plus tard
+          final = PCsuserAgent_list[randomUserAgent];
+          details.requestHeaders[i].value = final
+        }
+        if (BaseOS === "Phone") {
+          randomUserAgent = Math.floor(Math.random() * PhoneuserAgent_list.length);
+          final = PhoneuserAgent_list[randomUserAgent];
+          details.requestHeaders[i].value = final
+        }
+        if (BaseOS === "Other") {
+          randomUserAgent = Math.floor(Math.random() * OtheruserAgent_list.length);
+          final = OtheruserAgent_list[randomUserAgent];
+          details.requestHeaders[i].value = final
+
+        }
+        if (BaseOS === "Bot") {
+          randomUserAgent = Math.floor(Math.random() * BotsuserAgent_list.length);
+          final = BotsuserAgent_list[randomUserAgent];
+          details.requestHeaders[i].value = final
+
+        }
         
-      } else if (details.requestHeaders[i].name === 'sec-ch-ua-platform') {
-        //For OS detection
-        const os_list = ["Android", "Chrome OS", "Chromium OS", "iOS", "macOS", "Windows", "Unknown"]; //tout sauf linux casse les couilles 
-        var randomOS = Math.floor(Math.random() * os_list.length);
-        details.requestHeaders[i].value = os_list[randomOS];
-        
-      }
-      else if (details.requestHeaders[i].name === 'sec-ch-ua-mobile') {
+      } 
+
+      if (details.requestHeaders[i].name === 'sec-ch-ua-mobile') {
         //For know if mobile device or not 
         const mobile_list = ["0", "1"];
         var randomMobile = Math.floor(Math.random() * mobile_list.length);
         details.requestHeaders[i].value = mobile_list[randomMobile];
         
       }
-      else if (details.requestHeaders[i].name === 'accept-language') {
+      if (details.requestHeaders[i].name === 'Accept-Language') {
         //For Accept-Language most common
-        details.requestHeaders[i].value = "en-US";
+        details.requestHeaders[i].value = "fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7";
         
       }
-      else if (details.requestHeaders[i].name === 'accept') {
+      if (details.requestHeaders[i].name === 'accept') {
         //For know if mobile device or not 
         const acceptHeaderValues_list = [
           "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
@@ -190,9 +248,32 @@ let changeHeaderListener = function(details) {
       }
     }
     //for stop listener after changeHeader if user want to reset headers
-    return { requestHeaders: details.requestHeaders };
+    return { requestHeaders: details.requestHeaders};
   };
 
+
+// for listen if BackgroundFunction is call from content.js
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+  if (request.action === 'BackgroundFunction') {
+
+      // Add changeHeaderListener listener for change header tdc
+      chrome.webRequest.onBeforeSendHeaders.addListener(
+
+        //lancement de la fonction pour changer les headers
+        changeHeaderListener,
+        { urls: ["<all_urls>"] },
+        ["blocking", "requestHeaders"]
+      );
+      //final pour final UA connard
+      sendResponse(final);
+            
+  }
+  else if (request.action === 'StopBackgroundFunction') {
+
+    chrome.webRequest.onBeforeSendHeaders.removeListener(changeHeaderListener);
+    sendResponse({ message: 'Header reset successfully !' });
+  }
+});
 
 
 /*

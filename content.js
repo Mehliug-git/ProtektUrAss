@@ -1,16 +1,19 @@
-
 function performActionBasedOnSwitchState(isSwitchOn) {
   if (isSwitchOn == true) {
     // Si le switch est ON
     console.log('Switch is ON. LETZ GOOOOOOOOOOOOOOOOOOOO');
       //start all function
-    launch()
+   // launch()
 
     //change useragent from Header
     // Call the funciton in background.js
-    chrome.runtime.sendMessage({ action: 'BackgroundFunction' }, function(response) {
-      console.log('Response from background.js:', response);
+    chrome.runtime.sendMessage({ action: 'BackgroundFunction' }, function(useragent) {
+      console.log('Response from background.js:', useragent);
+      let JSuseragent = useragent;
+      ChangeJS(JSuseragent);
     });
+
+    
 
     //delete cookies
     document.cookie.split(";").forEach(function(c) {
@@ -94,19 +97,27 @@ function setNavigatorProperty(propertyName, propertyValue) {
   });
 }
 
-// Launch all functions
-function launch() {
+// Change JS entities 
+function ChangeJS(JSuseragent) {
   // Make a list with all important navigator properties
   var funct_list = ["userAgent", "platform", "appCodeName", "appVersion", "appName", "gpu", "plugins", "language", "doNotTrack", "cookieEnabled", "hardwareConcurrency"];
 
-  var value = "💀💀💀";
-
   // For each function in the list
   funct_list.forEach(function(funct) {
+
+    if (funct == 'userAgent') {
+      var value = JSuseragent;
+      console.log(value)
+
+    }
+    else {
+      var value = "💀💀💀";
+    }
+
     // Crée un nouvel élément script
     var script = document.createElement('script');
 
-    // Ajoute le code du script
+    // Ajoute le code du script pour tout le reste
     script.textContent = '(' + setNavigatorProperty.toString() + ')("' + funct + '", "' + value + '");';
 
     // Ajoute le script à la page
@@ -116,4 +127,3 @@ function launch() {
     script.parentNode.removeChild(script);
   });
 }
-

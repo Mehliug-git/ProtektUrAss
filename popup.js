@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
       // Basculer la classe 'on' pour changer l'état visuel du switch
       customSwitch.classList.toggle('on');
 
+      
       // Vérifie si le switch est en position 'on'
       var isSwitchOn = customSwitch.classList.contains('on');
       console.log("Switch changed: " + isSwitchOn);
@@ -18,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
       // Obtient l'onglet actif
       chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
         // Envoie un message à l'onglet actif
-        chrome.tabs.sendMessage(tabs[0].id, { 'etat_switch': isSwitchOn });
+      chrome.tabs.sendMessage(tabs[0].id, { 'etat_switch': isSwitchOn });
       });
     });
   }
