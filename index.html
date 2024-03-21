@@ -2,6 +2,8 @@
 
 <head>
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' blob: filesystem: 'unsafe-inline';">
+    <meta charset="UTF-8">
+    
 </head>
 
 <body>
@@ -14,11 +16,60 @@
         <div id="customSwitch" class="switch">
             <input type="checkbox" id="switch" /><label for="switch"></label>
         </div>
-        <p>www.flaticon.com</p>
-        <p>2 / 10</p>
+        <div id="Headers-container">
+            <p id="Headers"></p>
+        </div>
+    
+        <button id="copy">Copy all Headers</button>
+        <div id="custom-alert" style="display: none;"></div>
     </div>
 
     <style>
+
+    /* ***** CSS pour les fonction de l'app ***** */
+
+        #custom-alert {
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background-color: #f8f9fa;
+          color: #333;
+          padding: 15px 20px;
+          border-radius: 8px;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          z-index: 9999;
+        }
+        #copy {
+          padding: 10px 20px;
+          background-color: #64490a;
+          color: #fff;
+          border: none;
+          border-radius: 5px;
+          box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+          cursor: pointer;
+        }
+        
+        #copy:hover {
+          background-color: #d69b10;
+        }
+
+
+
+        #Headers-container {
+          margin: 20px auto;
+          padding: 20px;
+          background-color: #f8f9fa;
+          border-radius: 8px;
+          box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
+          max-width: 400px;
+        }
+        
+        #Headers {
+          color: #333;
+          font-weight: bold;
+          text-transform: uppercase;
+        }
 
         .extension {
             width: 300px;
@@ -27,7 +78,6 @@
             justify-content: center;
             flex-direction: column;
             align-items: center;
-            border-radius: 10%;
         }
 
         img {

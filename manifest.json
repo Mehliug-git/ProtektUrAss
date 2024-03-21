@@ -11,6 +11,11 @@
       "webNavigation",
       "<all_urls>"
     ],
+    "icons": {
+      "16": "peche.png", 
+      "48": "peche.png",  
+      "128": "peche.png" 
+    },
     "browser_action": {
       "default_popup": "index.html"
     },

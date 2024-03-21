@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Vérifie si l'élément a été trouvé avant d'ajouter l'écouteur d'événements
   if (customSwitch) {
-    customSwitch.addEventListener('click', function() {
+    customSwitch.addEventListener('change', function() {
       // Basculer la classe 'on' pour changer l'état visuel du switch
       customSwitch.classList.toggle('on');
 
