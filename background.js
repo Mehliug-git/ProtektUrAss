@@ -6,6 +6,7 @@ v3 : JS entities en cours de build UA OK
 
 TODO :
 Un de ses 4 va bien falloir clean les notes du code 
+Faire un historique des modif headers (pour savoir si un site a casser et sur quelle plateforme)
 */
 
 let webRequestListener;

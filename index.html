@@ -7,12 +7,13 @@
 </head>
 
 <body>
+    <div class="title">
+        <img src="/peche.png" alt="Une sacré pêche mon gourmand ehe :3">
+        <span id="titre">ProtektUrAss</span>
+    </div>
+
     <div class="extension">
-        <div>
-            <img src="/peche.png" alt="Une sacré pêche mon gourmand ehe :3">
-            <span id="titre">ProtektUrAss</span>
-        </div>
-        <p class="comment">MY ASS IS OPEN</p>
+        <p class="comment">MY ASS IS OPEN 🍑</p>
         <div id="customSwitch" class="switch">
             <input type="checkbox" id="switch" /><label for="switch"></label>
         </div>
@@ -27,6 +28,12 @@
     <style>
 
     /* ***** CSS pour les fonction de l'app ***** */
+        
+        .title{
+
+            align-items: baseline;
+            height: fit-content;
+        }
 
         #custom-alert {
           position: fixed;
@@ -54,7 +61,10 @@
           background-color: #d69b10;
         }
 
-
+        .comment {
+          font-size: 15 px;
+          color: #333;
+        }
 
         #Headers-container {
           margin: 20px auto;
@@ -73,7 +83,7 @@
 
         .extension {
             width: 300px;
-            height: 300px;
+            height: 420px;
             display: flex;
             justify-content: center;
             flex-direction: column;
@@ -84,19 +94,17 @@
             vertical-align: center;
             width: 50px;
             height: auto;
-            position: absolute;
+            position: static;
             top : 5px;
             left: 5px;
         }
 
         #titre {
-            vertical-align: center;
             font-size: 20px;
             font-style: oblique;
-            position: relative;
-            top: -35px;
-            left: -40px;
             color: #fd4b85;
+            display: contents;
+            margin-bottom: 10px;
         }
 
         .checkbox {

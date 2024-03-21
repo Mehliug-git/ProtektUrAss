@@ -50,6 +50,7 @@ function handleMessage(request) {
       console.log('CHECKED // ON');
       //reload for take effect
       window.location.reload(true);
+     
     } else {
       // If checkbox is checked
       console.log('NOT CHECKED // OFF');

@@ -21,6 +21,10 @@ document.addEventListener('DOMContentLoaded', function() {
         // Envoie un message à l'onglet actif
       chrome.tabs.sendMessage(tabs[0].id, { 'etat_switch': isSwitchOn });
       });
+
+      
+     //window.close();
+      
     });
   }
 
@@ -44,10 +48,6 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
 
-    // Obtient la valeur de etat_switch depuis le stockage Chrome sync
-    chrome.storage.sync.get('etat_switch', function(data) {
-      switchElement.checked = data.etat_switch || false;
-    });
   }
 });
 
@@ -110,23 +110,14 @@ chrome.storage.local.get(['newheaders'], function(result) {
 });
 
 
+  // Obtient la valeur de etat_switch depuis le stockage Chrome sync pour synchro letat du switch avec le front
+  chrome.storage.sync.get('etat_switch', function(data) {
+    switchon = data.etat_switch || false;
 
+    var checkbox = document.getElementById("switch"); 
 
+    if (switchon) {
 
-
-
-
-
-
-
-
-
-/*
-chrome.storage.sync.get('newheaders', function(data) {
-  var newheaders_data = data.newheaders; // Access the 'newheaders' property correctly
-  console.log('data.newheaders: ', newheaders_data);
-  if (newheaders_data) {
-    document.getElementById('Headers').innerText = newheaders_data;
+      checkbox.checked = true
   }
-});*/
-
+  });
