@@ -8,4 +8,15 @@ function changeText() {
     } else {
         comment.textContent = "MY ASS IS OPEN";
     }
+    chrome.storage.sync.get('etat_switch', function(data) {
+        var isSwitchOn = data.etat_switch || false;
+      
+        // Applique l'animation en fonction de l'état actuel du switch
+        if (isSwitchOn) {
+            //pour checked restart pour le faire aller de on a off et reverse pour linverse
+
+            animate.reverse();
+            animateBackground.reverse();
+        }
+    }
 }
