@@ -3,7 +3,7 @@ function performActionBasedOnSwitchState(isSwitchOn) {
     // Si le switch est ON
     console.log('Switch is ON. LETZ GOOOOOOOOOOOOOOOOOOOO');
       //start all function
-   // launch()
+
 
     //change useragent from Header
     // Call the funciton in background.js

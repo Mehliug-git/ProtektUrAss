@@ -1,12 +1,11 @@
-// Voir aussi pour mettre un mode troll pour pouvoir mettre des trucs a la con dedans genre changer tout les headers par des nom random
-// tfacon s'il sont pas OK je le   fait en soumsoum 
 /*
-NOTES 
-
+NOTES :
 J'ai fait en sorte que le useragent soit proche de celui déjà used 
 
-JS entities en cours de build UA OK
+v3 : JS entities en cours de build UA OK
 
+TODO :
+Un de ses 4 va bien falloir clean les notes du code 
 */
 
 let webRequestListener;
@@ -247,6 +246,12 @@ let changeHeaderListener = function(details) {
         
       }
     }
+    //hophop dans le chrome storage pour l'afficher sur cette si belle interface sa race 
+    chrome.storage.local.set({ 'newheaders': details.requestHeaders }, function() {
+      console.log('New Headers save in chrome storage');
+    });
+
+
     //for stop listener after changeHeader if user want to reset headers
     return { requestHeaders: details.requestHeaders};
   };
@@ -275,20 +280,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   }
 });
 
-
-/*
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-  if (request.etat_switch !== undefined) {
-      // fou l'état du switch dans le storage chrome
-      chrome.storage.local.set({ 'etat_switch': request.etat_switch });
-      
-      // send msg page active
-      chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-          chrome.tabs.sendMessage(tabs[0].id, { 'etat_switch': request.etat_switch });
-      });
-  }
-});
-*/
 
 // Add listener for messages from popup.js
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {

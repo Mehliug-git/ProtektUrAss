@@ -58,3 +58,75 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     console.log(request.etat_switchLog);
   }
 });
+
+
+
+function customalert(message, time) {
+  var alerte = document.getElementById('custom-alert');
+  alerte.innerText = message;
+  alerte.style.display = 'block';
+
+  setTimeout(function() {
+    alerte.style.display = 'none';
+  }, time);
+}
+
+
+
+//pour afficher le nouveau User-Agent sur popup.html
+chrome.storage.local.get(['newheaders'], function(result) {
+  const new_infos = JSON.stringify(result.newheaders);
+  console.log('Valeur actuelle est ' + new_infos);
+  
+  // trouve lee userAgent
+  result.newheaders.forEach(function(header) {
+    if (header.name === "User-Agent") {
+      // Assigner la valeur à l'élément avec l'id 'Headers' (sous forme de texte)
+      document.getElementById('Headers').innerText = header.value;
+    }
+
+
+
+
+  //pour le boutton Copier pour avoir tt les infos des changements:
+  document.getElementById('copy').addEventListener('click', function() {
+
+    // element textarea temp pour copier le texte
+    var textarea = document.createElement('textarea');
+    textarea.value = new_infos;
+    document.body.appendChild(textarea);
+
+    // selectionne le txt a mettre dans le clipboard
+    textarea.select();
+    document.execCommand('copy');
+
+    // remove tmp element textarea
+    document.body.removeChild(textarea);
+
+    // affiche un msg pour le user
+    customalert("Infos copié avec succès !", 2000);
+  });
+  });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+chrome.storage.sync.get('newheaders', function(data) {
+  var newheaders_data = data.newheaders; // Access the 'newheaders' property correctly
+  console.log('data.newheaders: ', newheaders_data);
+  if (newheaders_data) {
+    document.getElementById('Headers').innerText = newheaders_data;
+  }
+});*/
+
