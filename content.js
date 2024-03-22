@@ -1,8 +1,8 @@
 function performActionBasedOnSwitchState(isSwitchOn) {
-  if (isSwitchOn == true) {
+  if (isSwitchOn) {
+
     // Si le switch est ON
-    console.log('Switch is ON. LETZ GOOOOOOOOOOOOOOOOOOOO');
-      //start all function
+    console.log('Switch is ON. LETZ GOOOOOOOOOOOOOOOOOOOO  ' + isSwitchOn);
 
 
     //change useragent from Header
@@ -14,61 +14,53 @@ function performActionBasedOnSwitchState(isSwitchOn) {
     });
 
     
-
     //delete cookies
     document.cookie.split(";").forEach(function(c) {
       document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
     });
+    
 
   } else {
     //bah s'il l'est pas connard
-    console.log('Switch is OFF');
+    console.log('Switch is OFF  ' + isSwitchOn);
+
+    chrome.storage.local.set({ 'etat_switch': false });
 
     chrome.runtime.sendMessage({ action: 'StopBackgroundFunction' }, function(response) {
       console.log('Response from background.js:', response);
     });
+
+
   }
 }
 
 
-// Récupérez l'état du switch depuis le stockage local
-chrome.storage.local.get('etat_switch', function(data) {
-  const isSwitchOn = data.etat_switch || false;
-  
-  // Exécutez les actions en fonction de l'état du switch
-  performActionBasedOnSwitchState(isSwitchOn);
+// Add listener for messages de popup.js
+chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+  // Vérifie si le message contient l'état du switch
+  if (message.etat_switch !== undefined) {
+    var isSwitchOn = message.etat_switch;
+
+    console.log("État du switch reçu dans content.js: " + isSwitchOn);
+
+    //lance les actions en fonction de letat du switch
+    performActionBasedOnSwitchState(isSwitchOn);
+    //reload for take effect hehe
+    window.location.reload();
+  }
 });
 
-// Function for knowing if the checkbox is checked on the active page 
-function handleMessage(request) {
-  if (request.etat_switch !== undefined) {
-    // Store the checkbox state in local storage
-    chrome.storage.local.set({ 'etat_switch': request.etat_switch });
 
-    if (request.etat_switch) {
-      // If checkbox is checked ONLY WHEN USER CLICK !!
-      console.log('CHECKED // ON');
-      //reload for take effect
-      window.location.reload(true);
-     
-    } else {
-      // If checkbox is checked
-      console.log('NOT CHECKED // OFF');
-      //reload for take effect
-      window.location.reload(true);
-    }
-  }
-}
 
-// Add listener for messages from popup.js
-chrome.runtime.onMessage.addListener(handleMessage);
+
+
 
 // Check if chrome.tabs is defined before using it
 if (chrome.tabs) {
   // Listen for tab updates to restore the checkbox state
   chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     chrome.storage.local.get('etat_switch', function(data) {
-      const checkboxState = data.etat_switch;
+      var checkboxState = data.etat_switch;
       chrome.tabs.sendMessage(tabId, { 'etat_switch': checkboxState });
     });
   });

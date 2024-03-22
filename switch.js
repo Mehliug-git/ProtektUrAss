@@ -6,13 +6,15 @@ function changeText() {
 
     if (checkbox.checked) {
 
+        chrome.storage.sync.set({'etat_switch': true})
         comment.textContent = "ANONYME 🥷🏻";
+        
+
 
     } else {
 
+        chrome.storage.sync.set({'etat_switch': false})
         comment.textContent = "MY ASS IS OPEN 🍑";
     }
 
 }
-
-

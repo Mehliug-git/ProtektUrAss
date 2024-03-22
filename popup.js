@@ -2,54 +2,41 @@ document.addEventListener('DOMContentLoaded', function() {
   // Récupère la référence de l'élément switch par son ID
   var customSwitch = document.getElementById('customSwitch');
 
+  console.log(customSwitch)
+
   // Vérifie si l'élément a été trouvé avant d'ajouter l'écouteur d'événements
   if (customSwitch) {
     customSwitch.addEventListener('change', function() {
       // Basculer la classe 'on' pour changer l'état visuel du switch
-      customSwitch.classList.toggle('on');
+      //customSwitch.classList.toggle('on');
 
-      
-      // Vérifie si le switch est en position 'on'
-      var isSwitchOn = customSwitch.classList.contains('on');
-      console.log("Switch changed: " + isSwitchOn);
+      var checkbox = document.getElementById("switch");
+
+      if (checkbox.checked) {
+        var isSwitchOn = true;
+
+      }else{
+
+        var isSwitchOn = false;
+      }
+
+      console.log("Switch changed popup: " + isSwitchOn);
 
       // Sauvegarde l'état du switch
       chrome.storage.sync.set({ 'etat_switch': isSwitchOn });
-
       // Obtient l'onglet actif
       chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
         // Envoie un message à l'onglet actif
-      chrome.tabs.sendMessage(tabs[0].id, { 'etat_switch': isSwitchOn });
+        chrome.tabs.sendMessage(tabs[0].id, { 'etat_switch': isSwitchOn });
       });
 
       
-     //window.close();
-      
-    });
-  }
-
-  // Récupère la référence de la case à cocher
-  var switchElement = document.getElementById('toggleSwitch');
-
-  // Vérifie si l'élément a été trouvé avant de lui ajouter l'écouteur d'événements
-  if (switchElement) {
-    switchElement.addEventListener('change', function() {
-      // Vérifie si la case à cocher est cochée
-      var isChecked = switchElement.checked;
-      console.log("Checkbox changed: " + isChecked);
-
-      // Sauvegarde l'état de la case à cocher
-      chrome.storage.sync.set({ 'etat_switch': isChecked });
-
-      // Obtient l'onglet actif
-      chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-        // Envoie un message à l'onglet actif
-        chrome.tabs.sendMessage(tabs[0].id, { 'etat_switch': isChecked });
-      });
     });
 
-  }
+  }  
 });
+
+
 
 // Ajoute une section pour gérer la sortie console depuis content.js
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
@@ -104,20 +91,33 @@ chrome.storage.local.get(['newheaders'], function(result) {
     document.body.removeChild(textarea);
 
     // affiche un msg pour le user
-    customalert("Infos copié avec succès !", 2000);
+    customalert("Infos copiée avec succès !", 2000);
   });
   });
 });
 
 
-  // Obtient la valeur de etat_switch depuis le stockage Chrome sync pour synchro letat du switch avec le front
-  chrome.storage.sync.get('etat_switch', function(data) {
-    switchon = data.etat_switch || false;
 
-    var checkbox = document.getElementById("switch"); 
+chrome.storage.sync.get('etat_switch', function(data) {
+  isSwitchOn = data.etat_switch
 
-    if (switchon) {
 
-      checkbox.checked = true
+
+  console.log('switchON : '+ isSwitchOn)
+  var checkbox = document.getElementById("switch"); 
+
+  if (isSwitchOn == true) {
+
+    chrome.storage.sync.set({ 'etat_switch': true });
+    checkbox.checked = true
+    console.log("dans switchon le s : " + switchon)
   }
-  });
+
+  else {
+
+    chrome.storage.sync.set({ 'etat_switch': false });
+    checkbox.checked = false
+    console.log("pas dans switchon le s : " + switchon)
+
+  }
+});
