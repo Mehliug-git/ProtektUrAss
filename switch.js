@@ -9,8 +9,6 @@ function changeText() {
         chrome.storage.sync.set({'etat_switch': true})
         comment.textContent = "ANONYME 🥷🏻";
         
-
-
     } else {
 
         chrome.storage.sync.set({'etat_switch': false})

@@ -3,7 +3,7 @@ function performActionBasedOnSwitchState(isSwitchOn) {
 
     // Si le switch est ON
     console.log('Switch is ON. LETZ GOOOOOOOOOOOOOOOOOOOO  ' + isSwitchOn);
-
+    
 
     //change useragent from Header
     // Call the funciton in background.js
@@ -34,6 +34,19 @@ function performActionBasedOnSwitchState(isSwitchOn) {
   }
 }
 
+function punycode() {
+  var domain = window.location.hostname;
+  
+  // Lancer punycode.js
+  if (containsPunycode(domain)) {
+    console.log("NORMAL !!!!!!  " + domain)
+
+  } else {
+    console.log("PUNYCODE !!!!!!")
+    alert("punycode.js returned false");
+  }
+}
+
 
 // Add listener for messages de popup.js
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
@@ -43,15 +56,16 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
     console.log("État du switch reçu dans content.js: " + isSwitchOn);
 
+    //punnycode check
+    punycode()
+
     //lance les actions en fonction de letat du switch
     performActionBasedOnSwitchState(isSwitchOn);
     //reload for take effect hehe
     window.location.reload();
+    
   }
 });
-
-
-
 
 
 
@@ -70,7 +84,7 @@ if (chrome.tabs) {
 
 // FONCTION FOR THIS BROKEN SHITTY CODE SRX JVAI CLAQUER 
 
-//Funciton for change navigator properties  
+// Funciton for change navigator properties  
 function setNavigatorProperty(propertyName, propertyValue) {
   Object.defineProperty(navigator, propertyName, {
     value: propertyValue,

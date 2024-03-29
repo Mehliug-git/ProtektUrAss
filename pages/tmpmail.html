@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' 'nonce-6538b0327b'">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>body { font-family: Roboto, sans-serif; } strong { user-select: all; cursor: pointer; }</style>
+</head>
+
+<body>
+    <p>Loading...</p>
+    <div id="custom-alert" style="display: none;"></div>
+
+    <script nonce="6538b0327b">
+        // detect si user clique sur l'autre page pour garder ouvert 
+        document.addEventListener('visibilitychange', function() {
+            if (document.visibilityState === 'hidden') {
+                
+                customalert("click sur l'icone pour fermer chakalito", 2000);
+                
+    
+    
+            }
+        });
+
+        function customalert(message, time) {
+            var alerte = document.getElementById('custom-alert');
+            alerte.innerText = message;
+            alerte.style.display = 'block';
+
+            setTimeout(function() {
+              alerte.style.display = 'none';
+            }, time);
+        }
+
+    
+    </script>
+
+    <!-- Juste pour ecouter les nvx message  --> 
+    <script src="./JS/eventsource.min.js"></script>
+    <script src="./JS/mailjs.min.js"></script>
+
+    <script nonce="6538b0327b">
+
+        const puts = (...args) => document.body.insertAdjacentHTML("beforeEnd", `<p>${args.join(" ")}</p>`);
+
+        const mailjs = new Mailjs();
+        let username = "";
+
+        puts("[1/4] Creation du compte");
+
+        // Create a random account.
+        mailjs.createOneAccount()
+            .then(onAccountCreated);
+
+        function onAccountCreated(acc) {
+            if (!acc.status) throw acc.message;
+
+            username = acc.data.username;
+
+            mailjs.on("open", onOpen);
+            mailjs.on("arrive", onNewMessage);
+        }
+
+        function onOpen() {
+            puts("[2/4]", "Attente du mail");
+            puts("[2/4]", 'voila ton mail chef :', `<strong>${username}</strong>`);
+        }
+
+        // It is triggered when a new mail arrives.
+        function onNewMessage(msg) {
+            puts("[3/4]", "NOUVEAU MAIL :");
+            puts(JSON.stringify(msg, null, 2));
+
+            // Stop listening.
+            mailjs.off();
+
+            // The created account is no longer needed.
+            mailjs.deleteMe()
+                .then(acc => {
+                    if (!acc.status) alert(acc.message);
+
+                    puts("[4/4]", "Suppaccsionn du compte");
+                });
+        }
+
+
+    </script>
+
+
+</body>
+
+</html>

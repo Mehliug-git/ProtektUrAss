@@ -1,20 +1,39 @@
-/*
+/*  
 NOTES :
-J'ai fait en sorte que le useragent soit proche de celui déjà used 
-
 v3 : JS entities en cours de build UA OK
 
+v4 : UI V2 marche bien 0 beug un truc de ouf
+
+v4.5 : typoquatt + historique (SO croustibat)
+
+v5 : UI V3 en cours de build (SO valou)
+
+v6 : L'idée banger de Faire une fonction email temp
+
+
+v44 930 : se mettre au normes légales 
 TODO :
 Un de ses 4 va bien falloir clean les notes du code 
 Faire un historique des modif headers (pour savoir si un site a casser et sur quelle plateforme)
-*/
 
+Faire un anti typosquatting [pas mal mais ne se declanche que au refresh de la page]
+
+Faire une page pour email temp [j'ai empecher que tu puisse fermer la page tmpmail pour pas perde les infos, mais la custom alert que je veux mettre pour que ses enculé de users reste pas dessus comme des cons ne marche pas]
+
+
+*/
 let webRequestListener;
 
 chrome.runtime.onInstalled.addListener(function() {
   chrome.webNavigation.onBeforeNavigate.addListener(function(details) {
     chrome.tabs.executeScript(details.tabId, { file: 'content.js' });
   });
+});
+
+
+
+chrome.browserAction.onClicked.addListener(function() {
+  chrome.windows.create({'url': 'popup.html', 'type': 'popup', 'width': 500, 'height': 600});
 });
 
 
@@ -28,6 +47,7 @@ let final
 
 // listen event webRequest for intercept request
 let changeHeaderListener = function(details) {
+
 
     // Modifie le User-Agent dans les en-têtes de la requête
     for (var i = 0; i < details.requestHeaders.length; ++i) {
@@ -289,5 +309,3 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     chrome.storage.local.set({ 'etat_switch': request.etat_switch });
   }
 });
-
-

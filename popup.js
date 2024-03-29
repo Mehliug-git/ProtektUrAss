@@ -7,9 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Vérifie si l'élément a été trouvé avant d'ajouter l'écouteur d'événements
   if (customSwitch) {
     customSwitch.addEventListener('change', function() {
-      // Basculer la classe 'on' pour changer l'état visuel du switch
-      //customSwitch.classList.toggle('on');
-
+      // Récupère la référence de l'élément switch par son ID
       var checkbox = document.getElementById("switch");
 
       if (checkbox.checked) {
@@ -28,11 +26,8 @@ document.addEventListener('DOMContentLoaded', function() {
       chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
         // Envoie un message à l'onglet actif
         chrome.tabs.sendMessage(tabs[0].id, { 'etat_switch': isSwitchOn });
-      });
-
-      
+      }); 
     });
-
   }  
 });
 
@@ -97,7 +92,6 @@ chrome.storage.local.get(['newheaders'], function(result) {
 });
 
 
-
 chrome.storage.sync.get('etat_switch', function(data) {
   isSwitchOn = data.etat_switch
 
@@ -110,14 +104,12 @@ chrome.storage.sync.get('etat_switch', function(data) {
 
     chrome.storage.sync.set({ 'etat_switch': true });
     checkbox.checked = true
-    console.log("dans switchon le s : " + switchon)
   }
 
   else {
 
     chrome.storage.sync.set({ 'etat_switch': false });
     checkbox.checked = false
-    console.log("pas dans switchon le s : " + switchon)
 
   }
 });

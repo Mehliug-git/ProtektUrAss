@@ -1,4 +1,5 @@
 {
+
     "manifest_version": 2,
     "name": "ProtektUrAss",
     "version": "3",
@@ -22,14 +23,15 @@
     "content_scripts": [
       {
         "matches": ["<all_urls>"],
-        "js": ["content.js"],
+        "js": ["content.js", "punycode.js"],
         "run_at": "document_start"
-      }
+      } 
     ],
     "background": {
       "scripts": ["background.js"],
       "persistent": true
-    }
+    },
+    "content_security_policy": "script-src 'self' 'unsafe-inline' 'sha256-9VojYMXme87p0ebCbfqR7Xy2dWS7L70SSh3lPlrRbd4=' 'sha256-iOrzVYgBsYh9oAub0h3O5JU/B4Gocjb0M4IR3FRsiSk=' 'sha256-PXcEYG4M52bxkrSyuKZc3M/z9OiZOTAksPL9nWEYWZc=' 'sha256-VvCvyTsdVmEzVVvE16/8oV4zu6X4i0dtgfpARNSnQSk=' 'sha256-JNw6nG/T+XeqJdx/4CuyN1IBmZHbDYiuD0UEzfmZTAs='; object-src 'self'"
 
   }
   
