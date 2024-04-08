@@ -91,8 +91,8 @@ document.getElementById('refresh').addEventListener('click', async () => {
     });
     //recup les ID des mails
 
-    name = 'w-iypmi3'
-    token = 'B48EFCE219BBC7DB784DA36D66E1C27E914D7413'
+    //name = 'w-iypmi3'
+    //token = 'B48EFCE219BBC7DB784DA36D66E1C27E914D7413'
     
     const url_get_msg_id = `https://www.developermail.com/api/v1/mailbox/${name}`;
     const response_msg_id = await makeRequest('GET', url_get_msg_id, token);
@@ -109,8 +109,6 @@ document.getElementById('refresh').addEventListener('click', async () => {
 
 
     displayResult(msg_id_list); 
-    console.log(response_msg_id.result)
-
 
 
 
@@ -120,17 +118,39 @@ document.getElementById('refresh').addEventListener('click', async () => {
     const url_refresh = `https://www.developermail.com/api/v1/mailbox/${name}/messages`;
     const response_refresh = await makeRequest('POST', url_refresh, token, msg_id_list);
 
-    displayResult(response_refresh.result[""]); 
+
+    mail_result = response_refresh.result
+
+  
+
+
+    //bah le second pour enlever la merde et ne garder que la date l'expediteur et le content hehehe
+    let contentList = [];
+    mail_result.forEach(function(item) {
+        // Extrayez l'expéditeur, la date et le contenu de chaque mail
+        let sender = item.value.match(/From: (.+?)\r\n/)[1];
+        let date = item.value.match(/Date: (.+?)\r\n/)[1];
+        let content = item.value.match(/Content-Type: text\/plain; charset="UTF-8"\r\n\r\n(.+)/s)[1];
+
+        // Créez un objet contenant l'expéditeur, la date et le contenu
+        let mail = {
+            sender: sender,
+            date: date,
+            content: content
+        };
+
+        // Ajoutez cet objet à la liste des mails
+        contentList.push(mail);
+    });
+
+
+
+
+
+    console.log(contentList)
+
+    displayResult(contentList) 
+
 
     
 })
-
-
-document.getElementById('reset').addEventListener('click', async () => {
-
-    //fait le un de ses 4 
-    const name = 'exampleMailbox'; 
-    const url = `https://www.developermail.com/api/v1/mailbox/${name}/token`;
-    const response = await makeRequest('PUT', url);
-    displayResult(response); 
-});
