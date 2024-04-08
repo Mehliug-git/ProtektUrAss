@@ -66,7 +66,7 @@ document.getElementById('create').addEventListener('click', async () => {
     console.log('Name:', name);
     console.log('Token:', token);
 
-    displayResult(name, token); 
+    displayResult(name + "@developermail.com", token); 
 
     // Store name and token in chrome storage
     chrome.storage.sync.set({ name, token }, () => {
