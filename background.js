@@ -8,7 +8,7 @@ v4.5 : typoquatt + historique (SO croustibat)
 
 v5 : UI V3 en cours de build (SO valou)
 
-v6 : L'idée banger de Faire une fonction email temp
+v6 : L'idée banger de Faire une fonction email temp + ManifestV3
 
 
 v44 930 : se mettre au normes légales 
@@ -16,7 +16,7 @@ TODO :
 Un de ses 4 va bien falloir clean les notes du code 
 Faire un historique des modif headers (pour savoir si un site a casser et sur quelle plateforme)
 
-Faire un anti typosquatting [pas mal mais ne se declanche que au refresh de la page]
+Faire un anti typosquatting [pas mal mais ne se declanche que au refresh de la page] oui pis en sah jsuis pas sur que ca marche bien alors va revoir ça chakalito 
 
 Faire une page pour email temp [j'ai empecher que tu puisse fermer la page tmpmail pour pas perde les infos, mais la custom alert que je veux mettre pour que ses enculé de users reste pas dessus comme des cons ne marche pas]
 

@@ -12,7 +12,7 @@ button.addEventListener('click', function() {
       mainpage.style.display = 'block';
     }
     
-    const html = "<meta http-equiv=\"Content-Security-Policy\" content=\"script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net/\">  <div id='setting_page' style='display: block;'><h1>Settings</h1><div id='tmp-mail' style='display: none;'></div><div id='Headers'></div><button id='btn-tmp-mail'>Temp Mail</button></div>";
+    const html = "<head><meta http-equiv=\"Content-Security-Policy\" content=\"script-src 'nonce-EDNnf03nceIOfn39fn3e9h3sdfa'\"></head><div id='setting_page' style='display: block;'><h1>Settings</h1><div id='tmp-mail' style='display: none;'></div><div id='Headers'></div><button id='btn-tmp-mail'>Temp Mail</button></div>";
     
     var setting_page = document.getElementById('setting_page');
     setting_page.innerHTML = html;
@@ -29,6 +29,11 @@ button.addEventListener('click', function() {
     tmpMailButton.addEventListener('click', function() {
       // redirect tmpmail.html
       window.location.href = 'pages/tmpmail.html';
+
+      //ouverture popup
+     // var url = chrome.runtime.getURL('pages/tmpmail.html');
+
+     // chrome.tabs.create({ url: url });
     });
   }
   
