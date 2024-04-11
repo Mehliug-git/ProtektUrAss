@@ -6,20 +6,27 @@ v4 : UI V2 marche bien 0 beug un truc de ouf
 
 v4.5 : typoquatt + historique (SO croustibat)
 
-v5 : UI V3 en cours de build (SO valou)
+v5 : UI V3 en cours de build (SO valou) [EN COURS]
 
-v6 : L'idée banger de Faire une fonction email temp + ManifestV3
+v6 : L'idée banger de Faire une fonction email temp + ManifestV3 [C'EST CIAO]
 
 
-v44 930 : se mettre au normes légales 
+v44 930 : se mettre au normes légales ;)
 TODO :
-Un de ses 4 va bien falloir clean les notes du code 
-Faire un historique des modif headers (pour savoir si un site a casser et sur quelle plateforme)
+Un de ses 4 va bien falloir clean les notes du code [RELOU]
 
+
+
+[FAIT / EN COURS]
 Faire un anti typosquatting [pas mal mais ne se declanche que au refresh de la page] oui pis en sah jsuis pas sur que ca marche bien alors va revoir ça chakalito 
 
-Faire une page pour email temp [j'ai empecher que tu puisse fermer la page tmpmail pour pas perde les infos, mais la custom alert que je veux mettre pour que ses enculé de users reste pas dessus comme des cons ne marche pas]
+Faire une page pour email temp [C'est bon ça marche + se souviens du derniers mails + mails accesible]
 
+Je sait que t'a la flemme gros chien mais faut faire les settings 
+
+
+[+ tard / OSEF]
+Faire un historique des modif headers (pour savoir si un site a casser et sur quelle plateforme) [Alors en vrais btw le user peux juste regarder quand son site est pété quel UA il à actuellement]
 
 */
 let webRequestListener;
@@ -204,6 +211,15 @@ let changeHeaderListener = function(details) {
         // Yahoo! bot
         'Mozilla/5.0 (compatible; Yahoo! Slurp; http://help.yahoo.com/help/us/ysearch/slurp)'
         ];
+
+
+        //met le mode de fonctionnement sur le choix user
+        let UAtype 
+        chrome.storage.sync.get(['UAtype'], (result) => {
+          UAtype = result
+        });
+
+        console.log("UA PE !!!!!!! : " + UAtype)
 
         if (BaseOS === undefined) {
           BaseOS = "PC";

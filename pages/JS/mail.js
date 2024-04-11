@@ -1,4 +1,3 @@
-
 // Function to make API requests using fetch
 async function makeRequest(method, url, token, msg_id_list) {
 
@@ -81,7 +80,7 @@ document.getElementById('create').addEventListener('click', async () => {
 document.getElementById('refresh').addEventListener('click', async () => {
     let name, token;
 
-
+    //quand refresh recois le nom et token du chrome storage  
     await new Promise(resolve => {
         chrome.storage.sync.get(['name', 'token'], (result) => {
             name = result.name;
@@ -91,6 +90,7 @@ document.getElementById('refresh').addEventListener('click', async () => {
     });
     //recup les ID des mails
 
+    //mail avec des mail recu pour test le truc
     //name = 'w-iypmi3'
     //token = 'B48EFCE219BBC7DB784DA36D66E1C27E914D7413'
     
@@ -110,11 +110,7 @@ document.getElementById('refresh').addEventListener('click', async () => {
 
     displayResult(msg_id_list); 
 
-
-
-    
-    //c'est bien mimi de vouloir lire les mails mais sans l'id des mails c'est po possible...
-    //bon ça a l'air d'etre pas loin de marcher regarde juste dans la doc si tu doit bien mettre les ID comme ça 
+    //btw refresh permet de recup les nouveaux mails 
     const url_refresh = `https://www.developermail.com/api/v1/mailbox/${name}/messages`;
     const response_refresh = await makeRequest('POST', url_refresh, token, msg_id_list);
 
@@ -124,7 +120,7 @@ document.getElementById('refresh').addEventListener('click', async () => {
   
 
 
-    //bah le second pour enlever la merde et ne garder que la date l'expediteur et le content hehehe
+    //pour enlever la merde et ne garder que la date l'expediteur et le content hehehe
     let contentList = [];
     mail_result.forEach(function(item) {
         // Extrayez l'expéditeur, la date et le contenu de chaque mail
@@ -144,13 +140,7 @@ document.getElementById('refresh').addEventListener('click', async () => {
     });
 
 
-
-
-
     console.log(contentList)
 
     displayResult(contentList) 
-
-
-    
 })
