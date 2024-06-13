@@ -1,3 +1,18 @@
+//pour afficher si un email actuellement enregistrer
+chrome.storage.sync.get(['name', 'token'], (result) => {
+    var email = result.name + "@developermail.com";
+
+
+    if (email != null) {
+        const actualmail = document.getElementById('actual-mail')
+        actualmail.innerHTML =  "Actual Temp-EMail :<br>" + email
+    }
+    else {
+        const actualmail = document.getElementById('actual-mail')
+        actualmail.innerHTML =  "No Actual Mail Found"
+    }
+});
+
 // Function to make API requests using fetch
 async function makeRequest(method, url, token, msg_id_list) {
 
@@ -49,7 +64,7 @@ async function makeRequest(method, url, token, msg_id_list) {
 //fonction pour envoyé des output sur le front
 function displayResult(result) {
     const apiResults = document.getElementById('apiResults');
-    apiResults.innerHTML = JSON.stringify(result, null, 2);
+    apiResults.innerHTML = "<br>Inbox : <br>" + JSON.stringify(result, null, 2);
 }
 
 
@@ -75,6 +90,7 @@ document.getElementById('create').addEventListener('click', async () => {
     //attendre 2s et refresh NE MARCHE PLUS AVEC MANIFEST V3
    // setInterval(refresh_mail(name), 2000);
 });
+
 
 
 document.getElementById('refresh').addEventListener('click', async () => {
@@ -126,14 +142,13 @@ document.getElementById('refresh').addEventListener('click', async () => {
         // Extrayez l'expéditeur, la date et le contenu de chaque mail
         let sender = item.value.match(/From: (.+?)\r\n/)[1];
         let date = item.value.match(/Date: (.+?)\r\n/)[1];
-        let content = item.value.match(/Content-Type: text\/plain; charset="UTF-8"\r\n\r\n(.+)/s)[1];
+
+        //je sépare le mail sur la dernière partie qui commence par \r\n\r\n
+        let parts = item.value.split(/\r?\n\r?\n/);
+        let content = parts.slice(1).join("\n\n").trim();
 
         // Créez un objet contenant l'expéditeur, la date et le contenu
-        let mail = {
-            sender: sender,
-            date: date,
-            content: content
-        };
+        let mail = "Envoyé par : " + sender + "<br></br>" + "à : " + date + "<br></br>" + content
 
         // Ajoutez cet objet à la liste des mails
         contentList.push(mail);

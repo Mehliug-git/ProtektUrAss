@@ -300,12 +300,12 @@ function changeHeaderListener(details) {
         removeRuleIds: [1], // Supprimer l'ancienne regle
       };
     
-      // Appel à chrome.declarativeNetRequest.updateDynamicRules
+      // Appel  chrome.declarativeNetRequest.updateDynamicRules
       chrome.declarativeNetRequest.updateDynamicRules(updateRequest, () => {
         if (chrome.runtime.lastError) {
           console.error("Erreur lors du rechargement des règles :", chrome.runtime.lastError.message);
         } else {
-          console.log("Les règles ont été mises à jour avec succès :", newRules);
+          console.log("Les règles ont été MAJ:", newRules);
         }
       });
     }
