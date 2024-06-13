@@ -57,14 +57,16 @@ function customalert(message, time) {
 
 //pour afficher le nouveau User-Agent sur popup.html
 chrome.storage.local.get(['newheaders']).then((result) => { 
-  const new_infos = JSON.stringify(result.newheaders);
+  const new_infos = result.newheaders;
 
-  
-  // trouve le userAgent
-  result.newheaders.forEach(function(header) {
+  for (let header of new_infos)
     if (header.name === "User-Agent") {
-      // Assigner la valeur à l'élément avec l'id 'Headers' (sous forme de texte)
-      document.getElementById('Headers').innerText = header.value;
+    // Assigner la valeur à l'élément avec l'id 'Headers' (sous forme de texte)
+    document.getElementById('Headers').innerText = header.value;
+    console.log(header.value)
+
+    }else{
+      console.log("PAS TROUVE USERAGENT" + new_infos)
     }
 
 
@@ -89,7 +91,7 @@ chrome.storage.local.get(['newheaders']).then((result) => {
     customalert("Infos copiée avec succès !", 2000);
   });
   });
-});
+
 
 
 chrome.storage.sync.get('etat_switch', function(data) {
