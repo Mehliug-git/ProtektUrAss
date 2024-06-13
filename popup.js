@@ -56,11 +56,11 @@ function customalert(message, time) {
 
 
 //pour afficher le nouveau User-Agent sur popup.html
-chrome.storage.local.get(['newheaders'], function(result) {
+chrome.storage.local.get(['newheaders']).then((result) => { 
   const new_infos = JSON.stringify(result.newheaders);
-  console.log('Valeur actuelle est ' + new_infos);
+
   
-  // trouve lee userAgent
+  // trouve le userAgent
   result.newheaders.forEach(function(header) {
     if (header.name === "User-Agent") {
       // Assigner la valeur à l'élément avec l'id 'Headers' (sous forme de texte)

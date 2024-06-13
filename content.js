@@ -7,10 +7,10 @@ function performActionBasedOnSwitchState(isSwitchOn) {
 
     //change useragent from Header
     // Call the funciton in background.js
-    chrome.runtime.sendMessage({ action: 'BackgroundFunction' }, function(useragent) {
+    chrome.runtime.sendMessage({ action: 'BackgroundFunction' }, function(useragent) { // pas chrome.tabs mais chrome.runtime car on envoie le msg a background 
       console.log('Response from background.js:', useragent);
       let JSuseragent = useragent;
-      ChangeJS(JSuseragent);
+      //ChangeJS(JSuseragent); MARCHE PLUS AVEC V3 faut mettre un nonce
     });
 
     
@@ -27,6 +27,7 @@ function performActionBasedOnSwitchState(isSwitchOn) {
     chrome.storage.local.set({ 'etat_switch': false });
 
     chrome.runtime.sendMessage({ action: 'StopBackgroundFunction' }, function(response) {
+
       console.log('Response from background.js:', response);
     });
 

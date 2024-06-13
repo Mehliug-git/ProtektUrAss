@@ -1,45 +1,43 @@
 /*  
-NOTES :
-v3 : JS entities en cours de build UA OK
-
-v4 : UI V2 marche bien 0 beug un truc de ouf
-
-v4.5 : typoquatt + historique (SO croustibat)
-
-v5 : UI V3 en cours de build (SO valou) [EN COURS]
-
-v6 : L'idée banger de Faire une fonction email temp + ManifestV3 [C'EST CIAO]
-
-
-v44 930 : se mettre au normes légales ;)
-TODO :
-Un de ses 4 va bien falloir clean les notes du code [RELOU]
+SCRIPT DU GIT EN TEST
 
 
 
-[FAIT / EN COURS]
-Faire un anti typosquatting [pas mal mais ne se declanche que au refresh de la page] oui pis en sah jsuis pas sur que ca marche bien alors va revoir ça chakalito 
-
-Faire une page pour email temp [C'est bon ça marche + se souviens du derniers mails + mails accesible]
-
-Je sait que t'a la flemme gros chien mais faut faire les settings 
+CA MARCHE !!!!!!!!!!!!!!!!
 
 
-[+ tard / OSEF]
-Faire un historique des modif headers (pour savoir si un site a casser et sur quelle plateforme) [Alors en vrais btw le user peux juste regarder quand son site est pété quel UA il à actuellement]
 
+voir pour background.js modifie directement le contenu du rules.json car plus de randomisation
 */
 let webRequestListener;
-
+/*
 chrome.runtime.onInstalled.addListener(function() {
   chrome.webNavigation.onBeforeNavigate.addListener(function(details) {
     chrome.tabs.executeScript(details.tabId, { file: 'content.js' });
   });
 });
 
+*/
 
 
-chrome.browserAction.onClicked.addListener(function() {
+chrome.runtime.onInstalled.addListener(function() {
+  chrome.webNavigation.onBeforeNavigate.addListener(function(details) {
+
+  chrome.scripting.executeScript({
+  target: { tabId: details.tabId },
+  files: ["content.js"]
+}, () => {
+  if (chrome.runtime.lastError) {
+    console.error("Erreur d'injection du script de contenu:", chrome.runtime.lastError);
+  } else {
+    console.log("Script de contenu injecté avec succès");
+  }
+  });
+  });
+});
+
+
+chrome.action.onClicked.addListener(function() {
   chrome.windows.create({'url': 'popup.html', 'type': 'popup', 'width': 500, 'height': 600});
 });
 
@@ -53,7 +51,7 @@ let BaseOS
 let final
 
 // listen event webRequest for intercept request
-let changeHeaderListener = function(details) {
+function changeHeaderListener(details) {
 
 
     // Modifie le User-Agent dans les en-têtes de la requête
@@ -214,12 +212,17 @@ let changeHeaderListener = function(details) {
 
 
         //met le mode de fonctionnement sur le choix user
-        let UAtype 
         chrome.storage.sync.get(['UAtype'], (result) => {
-          UAtype = result
+          if (result === undefined){
+            BaseOS = BaseOS //on touche pas si le user n'a rien saisi
+            console.log("BaseOS choisi : " + BaseOS)
+          }
+          else {
+
+           BaseOS = result
+          }
         });
 
-        console.log("UA PE !!!!!!! : " + UAtype)
 
         if (BaseOS === undefined) {
           BaseOS = "PC";
@@ -285,35 +288,123 @@ let changeHeaderListener = function(details) {
     }
     //hophop dans le chrome storage pour l'afficher sur cette si belle interface sa race 
     chrome.storage.local.set({ 'newheaders': details.requestHeaders }, function() {
-      console.log('New Headers save in chrome storage');
+      console.log('New Headers save in chrome storage : '+ details.requestHeaders);
+      console.log(details.requestHeaders)
     });
+ 
+    // Fonction pour mettre à jour les règles directement dans rules.json
+    function updateRules(newRules) {
+      // Structure de l'objet UpdateRequest
+      const updateRequest = {
+        addRules: newRules,
+        removeRuleIds: [1], // Supprimer l'ancienne regle
+      };
+    
+      // Appel à chrome.declarativeNetRequest.updateDynamicRules
+      chrome.declarativeNetRequest.updateDynamicRules(updateRequest, () => {
+        if (chrome.runtime.lastError) {
+          console.error("Erreur lors du rechargement des règles :", chrome.runtime.lastError.message);
+        } else {
+          console.log("Les règles ont été mises à jour avec succès :", newRules);
+        }
+      });
+    }
+
+    // nouvelles regles 
+      const newRule =   [{
+        "id": 1,
+        "priority": 1,
+        "action": {
+          "type": "modifyHeaders",
+          "requestHeaders": [
+            {
+              "operation": "set",
+              "header": "User-Agent",
+              "value": details.requestHeaders[4].value
+            },
+            {
+              "operation": "set",
+              "header": "Sec-Ch-Ua-Platform",
+              "value": details.requestHeaders[2].value
+            },
+            {
+              "operation": "set",
+              "header": "Accept",
+              "value": details.requestHeaders[5].value
+            },
+            {
+              "operation": "set",
+              "header": "Accept-Language",
+              "value": "fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7"
+            },
+            {
+              "operation": "set",
+              "header": "sec-ch-ua-mobile",
+              "value": details.requestHeaders[1].value
+            }
+          ]
+        },
+        "condition": {
+          "urlFilter": "*",
+          "resourceTypes": ["main_frame", "sub_frame", "xmlhttprequest"]
+        }
+      }
+      ]
+    
+        updateRules(newRule);
 
 
+
+
+    
     //for stop listener after changeHeader if user want to reset headers
     return { requestHeaders: details.requestHeaders};
   };
 
-
+/*
+//ALLER JE TENTE LE TOUT POUR LE TOUT HAHAHAH
 // for listen if BackgroundFunction is call from content.js
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if (request.action === 'BackgroundFunction') {
-
-      // Add changeHeaderListener listener for change header tdc
+      // Ajouter l'écouteur pour modifier les en-têtes des requêtes
       chrome.webRequest.onBeforeSendHeaders.addListener(
-
-        //lancement de la fonction pour changer les headers
-        changeHeaderListener,
-        { urls: ["<all_urls>"] },
-        ["blocking", "requestHeaders"]
+          changeHeaderListener,
+          { urls: ["<all_urls>"] },
+          ["requestHeaders"]
       );
-      //final pour final UA connard
-      sendResponse(final);
-            
+      
+      // Envoyer une réponse
+      sendResponse({ final });
   }
+
   else if (request.action === 'StopBackgroundFunction') {
 
     chrome.webRequest.onBeforeSendHeaders.removeListener(changeHeaderListener);
-    sendResponse({ message: 'Header reset successfully !' });
+    sendResponse({ message: 'Header reset !' });
+  }
+});
+*/
+//AVEC CA JE CHANGE LE HEADERS MAIS QUE AVEC UN SEUL TRUC DANS RULES.JSON
+chrome.runtime.onInstalled.addListener(() => {
+  // Confirmer que les règles sont bien installées
+  console.log("Rules bien installée chef");
+});
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === 'BackgroundFunction') {
+    // Obtenir le statut des règles
+    chrome.declarativeNetRequest.getEnabledRulesets((ruleSets) => {
+      sendResponse({ enabledRuleSets: ruleSets });
+    });
+
+    // Ajouter l'écouteur pour modifier les en-têtes des requêtes
+    chrome.webRequest.onBeforeSendHeaders.addListener(
+      changeHeaderListener,
+      { urls: ["<all_urls>"] },
+      ["requestHeaders"]
+    );
+
+    return true; // Indique que sendResponse sera asynchrone
   }
 });
 

@@ -7,11 +7,23 @@
     "activeTab",
     "storage",
     "scripting",
-    "webRequest",
-    "webRequestBlocking",
+    "declarativeNetRequest",
     "webNavigation",
+    "webRequest",
+    "tabs"
+  ],
+  "host_permissions": [
     "<all_urls>"
   ],
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "modify_headers",
+        "enabled": true,
+        "path": "rules.json"
+      }
+    ]
+  },
   "icons": {
     "16": "peche.png",
     "48": "peche.png",
@@ -27,10 +39,10 @@
       "run_at": "document_start"
     }
   ],
-  "service_worker": "background.js",
-  "host_permissions": [
-    "<all_urls>"
-  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self';"
   }
