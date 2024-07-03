@@ -5,11 +5,9 @@ SCRIPT DU GIT EN TEST
 
 CA MARCHE !!!!!!!!!!!!!!!!
 
-
-
-voir pour background.js modifie directement le contenu du rules.json car plus de randomisation
 */
 let webRequestListener;
+let BaseOS
 /*
 chrome.runtime.onInstalled.addListener(function() {
   chrome.webNavigation.onBeforeNavigate.addListener(function(details) {
@@ -18,6 +16,14 @@ chrome.runtime.onInstalled.addListener(function() {
 });
 
 */
+
+//met le mode de fonctionnement sur le choix user
+chrome.storage.sync.get(['UAtype'], (result) => {
+  BaseOS = result.UAtype 
+  console.log("BaseOS choisi : " + BaseOS)   
+});
+
+
 
 
 chrome.runtime.onInstalled.addListener(function() {
@@ -47,8 +53,9 @@ chrome.action.onClicked.addListener(function() {
 
 // declaration en globale pour pas que il soit limiter au bloc et pouvoir le renvoyer dans la console user
 let randomUserAgent
-let BaseOS
 let final
+let CustomHeaderUA
+
 
 // listen event webRequest for intercept request
 function changeHeaderListener(details) {
@@ -59,32 +66,6 @@ function changeHeaderListener(details) {
 
       // definie dans une var l'actuel type de device pour changement header cohérent
       if (details.requestHeaders[i].name === 'sec-ch-ua-platform') {
-
-        if (details.requestHeaders[i].value === 'Windows') {
-          BaseOS = "PC";
-        }
-
-        if (details.requestHeaders[i].value === 'Linux') {
-          BaseOS = "PC";
-        }
-
-        if (details.requestHeaders[i].value === 'macOS') {
-          BaseOS = "PC";
-        }
-
-        if (details.requestHeaders[i].value === 'iOS') {
-          BaseOS = "Phone";
-        }
-
-        
-        if (details.requestHeaders[i].value === 'Android') {
-          BaseOS = "Phone";
-        }
-
-        else {
-          BaseOS = "PC";
-        }
-
         //For OS detection
         const os_list = ["Android", "Chrome OS", "Chromium OS", "iOS", "macOS", "Windows", "Unknown"]; //tout sauf linux casse les couilles 
         var randomOS = Math.floor(Math.random() * os_list.length);
@@ -211,47 +192,38 @@ function changeHeaderListener(details) {
         ];
 
 
-        //met le mode de fonctionnement sur le choix user
-        chrome.storage.sync.get(['UAtype'], (result) => {
-          if (result === undefined){
-            BaseOS = BaseOS //on touche pas si le user n'a rien saisi
-            console.log("BaseOS choisi : " + BaseOS)
-          }
-          else {
-
-           BaseOS = result
-          }
-        });
-
-
-        if (BaseOS === undefined) {
+        if (BaseOS == undefined) {
           BaseOS = "PC";
           console.log("OS de base non détecté, OS par défaut : PC")
         }
         
-        if (BaseOS === "PC") {
+        if (BaseOS == "PC") {
           randomUserAgent = Math.floor(Math.random() * PCsuserAgent_list.length);
           //pour utiliser sa valeure plus tard
           final = PCsuserAgent_list[randomUserAgent];
-          details.requestHeaders[i].value = final
+          CustomHeaderUA = final
         }
-        if (BaseOS === "Phone") {
+        if (BaseOS == "Phone") {
           randomUserAgent = Math.floor(Math.random() * PhoneuserAgent_list.length);
           final = PhoneuserAgent_list[randomUserAgent];
-          details.requestHeaders[i].value = final
+          CustomHeaderUA = final
         }
-        if (BaseOS === "Other") {
+        if (BaseOS == "Other") {
           randomUserAgent = Math.floor(Math.random() * OtheruserAgent_list.length);
           final = OtheruserAgent_list[randomUserAgent];
-          details.requestHeaders[i].value = final
+          CustomHeaderUA = final
 
         }
-        if (BaseOS === "Bot") {
+        if (BaseOS == "Bot") {
           randomUserAgent = Math.floor(Math.random() * BotsuserAgent_list.length);
           final = BotsuserAgent_list[randomUserAgent];
-          details.requestHeaders[i].value = final
+          CustomHeaderUA = final
 
         }
+      //hophop dans le chrome storage pour l'afficher sur cette si belle interface sa race 
+      chrome.storage.local.set({ 'newheaders': CustomHeaderUA }, function() {
+        console.log('New Headers save in chrome storage : '+ CustomHeaderUA);
+      });
         
       } 
 
@@ -286,11 +258,7 @@ function changeHeaderListener(details) {
         
       }
     }
-    //hophop dans le chrome storage pour l'afficher sur cette si belle interface sa race 
-    chrome.storage.local.set({ 'newheaders': details.requestHeaders }, function() {
-      console.log('New Headers save in chrome storage : '+ details.requestHeaders);
-      console.log(details.requestHeaders)
-    });
+
  
     // Fonction pour mettre à jour les règles directement dans rules.json
     function updateRules(newRules) {
@@ -311,6 +279,7 @@ function changeHeaderListener(details) {
     }
 
     // nouvelles regles 
+      console.log("HMM Bah ouais " + CustomHeaderUA)
       const newRule =   [{
         "id": 1,
         "priority": 1,
@@ -320,7 +289,7 @@ function changeHeaderListener(details) {
             {
               "operation": "set",
               "header": "User-Agent",
-              "value": details.requestHeaders[4].value
+              "value": CustomHeaderUA
             },
             {
               "operation": "set",
@@ -351,7 +320,7 @@ function changeHeaderListener(details) {
       }
       ]
     
-        updateRules(newRule);
+      updateRules(newRule);
 
 
 
@@ -361,30 +330,8 @@ function changeHeaderListener(details) {
     return { requestHeaders: details.requestHeaders};
   };
 
-/*
-//ALLER JE TENTE LE TOUT POUR LE TOUT HAHAHAH
-// for listen if BackgroundFunction is call from content.js
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-  if (request.action === 'BackgroundFunction') {
-      // Ajouter l'écouteur pour modifier les en-têtes des requêtes
-      chrome.webRequest.onBeforeSendHeaders.addListener(
-          changeHeaderListener,
-          { urls: ["<all_urls>"] },
-          ["requestHeaders"]
-      );
-      
-      // Envoyer une réponse
-      sendResponse({ final });
-  }
 
-  else if (request.action === 'StopBackgroundFunction') {
-
-    chrome.webRequest.onBeforeSendHeaders.removeListener(changeHeaderListener);
-    sendResponse({ message: 'Header reset !' });
-  }
-});
-*/
-//AVEC CA JE CHANGE LE HEADERS MAIS QUE AVEC UN SEUL TRUC DANS RULES.JSON
+//AVEC CA JE CHANGE LE HEADERS 
 chrome.runtime.onInstalled.addListener(() => {
   // Confirmer que les règles sont bien installées
   console.log("Rules bien installée chef");
@@ -392,19 +339,30 @@ chrome.runtime.onInstalled.addListener(() => {
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'BackgroundFunction') {
-    // Obtenir le statut des règles
+   
+   // Ajouter l'écouteur pour modifier les en-têtes des requêtes
+   chrome.webRequest.onBeforeSendHeaders.addListener(
+    changeHeaderListener,
+    { urls: ["<all_urls>"] },
+    ["requestHeaders"]
+  );
+   
+   
+   
+    // Envoyer le statut des règles
     chrome.declarativeNetRequest.getEnabledRulesets((ruleSets) => {
       sendResponse({ enabledRuleSets: ruleSets });
     });
 
-    // Ajouter l'écouteur pour modifier les en-têtes des requêtes
-    chrome.webRequest.onBeforeSendHeaders.addListener(
-      changeHeaderListener,
-      { urls: ["<all_urls>"] },
-      ["requestHeaders"]
-    );
-
     return true; // Indique que sendResponse sera asynchrone
+  }
+  else {
+
+    //pour eteindre l'extention
+
+    chrome.webRequest.onBeforeSendHeaders.removeListener(changeHeaderListener);
+    sendResponse({ message: 'Header reset !' });
+
   }
 });
 

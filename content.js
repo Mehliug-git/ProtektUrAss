@@ -1,3 +1,17 @@
+function onRefresh() {
+  alert("La page a été rafraîchie");
+  // Ajoutez ici le code que vous voulez exécuter
+}
+
+// Vérification si la page est rechargée
+window.addEventListener('beforeunload', function (event) {
+  // Détection si la page est rechargée
+  sessionStorage.setItem('is_reloaded', 'true');
+});
+
+
+
+
 function performActionBasedOnSwitchState(isSwitchOn) {
   if (isSwitchOn) {
 
@@ -34,6 +48,8 @@ function performActionBasedOnSwitchState(isSwitchOn) {
 
   }
 }
+
+
 
 function punycode() {
   var domain = window.location.hostname;

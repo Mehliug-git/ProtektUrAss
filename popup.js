@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
       chrome.storage.sync.set({ 'etat_switch': isSwitchOn });
       // Obtient l'onglet actif
       chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-        // Envoie un message à l'onglet actif
+        // Envoie un message à l'onglet actif AKA content.js
         chrome.tabs.sendMessage(tabs[0].id, { 'etat_switch': isSwitchOn });
       }); 
     });
@@ -59,16 +59,12 @@ function customalert(message, time) {
 chrome.storage.local.get(['newheaders']).then((result) => { 
   const new_infos = result.newheaders;
 
-  for (let header of new_infos)
-    if (header.name === "User-Agent") {
-    // Assigner la valeur à l'élément avec l'id 'Headers' (sous forme de texte)
-    document.getElementById('Headers').innerText = header.value;
-    console.log(header.value)
 
-    }else{
-      console.log("PAS TROUVE USERAGENT" + new_infos)
-    }
+  // Assigner la valeur à l'élément avec l'id 'Headers' (sous forme de texte)
+  document.getElementById('Headers').innerText = result.newheaders;
+  console.log("A Afficher sur lextention : " + result.newheaders)
 
+    
 
 
 
