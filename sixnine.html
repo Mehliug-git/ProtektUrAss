@@ -1,38 +1,17 @@
 <!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Informations sur le navigateur</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        .info {
-            margin-bottom: 10px;
-        }
-    </style>
-</head>
-<body>
-    <h1>Informations sur le navigateur</h1>
-    <div class="info">
-        <strong>User Agent:</strong> <span id="user-agent"></span>
-    </div>
-    <div class="info">
-        <strong>Sec-Ch-Ua-Platform:</strong> <span id="sec-ch-ua-platform"></span>
-    </div>
-
-    <script>
-        // Insérez les valeurs d'en-tête que le serveur a injectées dans le HTML
-        document.getElementById('user-agent').textContent = navigator.userAgent;
-
-        // Ces valeurs devraient être insérées par le serveur lors de la génération de la page
-        var secChUaPlatform = 'Non disponible'; // Par défaut
-        <% if (typeof secChUaPlatform !== 'undefined') { %>
-            secChUaPlatform = '<%= secChUaPlatform %>';
-        <% } %>
-        document.getElementById('sec-ch-ua-platform').textContent = secChUaPlatform;
-    </script>
-</body>
+<html>
+    <head>
+        <title>Poukave page</title>
+    </head>
+    <body>
+        <ul id="browser-info"></ul>
+        <script>
+            const browserInfo = document.getElementById("browser-info");
+            for (const property in navigator) {
+                const li = document.createElement("li");
+                li.textContent = `${property}: ${navigator[property]};`
+                browserInfo.appendChild(li);
+            }
+        </script>
+    </body>
 </html>

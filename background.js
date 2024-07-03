@@ -347,8 +347,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     ["requestHeaders"]
   );
    
-   
-   
     // Envoyer le statut des règles
     chrome.declarativeNetRequest.getEnabledRulesets((ruleSets) => {
       sendResponse({ enabledRuleSets: ruleSets });
