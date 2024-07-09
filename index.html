@@ -2,8 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anton+SC&display=swap" rel="stylesheet">
@@ -16,15 +14,6 @@
                 <span id="titre">ProtektUrAss</span>
             </div>    
             
-            <div class="wrapper">
-                <input type="checkbox" />
-                <div class="fab"></div>
-                <div class="fac">
-                <a href="/pages/settings.html"><img src="icons8-anonyme-32.png" alt=""></i></a>
-                <a href="/pages/tmpmail.html"><img src="icons8-courrier-32.png"/></i></a>
-                <!-- j'ai failli explosé mon clavier pour ces 2 petits boutons de merde, je n'ai donc pas fait d'effort c'est moche et m'en fou :D (en plus ca mene a rien ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah)-->
-                </div>
-            </div>
         </div>
 
         <!-- CSS FOR TITLE -->
@@ -71,7 +60,13 @@
             --border-radius: 100%;
             }
 
+            .header{
+
+                color: #fff;
+            }
+
             .wrapper {
+            margin-left: 80%;
             width: var(--width);
             height: var(--height);
             position: relative;
@@ -79,7 +74,6 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-top: 6rem;
             }
 
             .fab {
@@ -116,22 +110,19 @@
             }
 
             .fac {
-            /* floating actions container */
-            width: 40px;
-            height: 150px;
-            border-radius: 64px;
-            position: absolute;
-            background: #111;
-            z-index: 2;
-            padding: 0.5rem 0.5rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-            opacity: 0;
-            bottom: -110px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-            align-items: center;
-            transition: opacity 0.2s ease-in, bottom 0.2s ease-in, width 0.1s ease-in;
+                /* floating actions container */
+                width: 150px;
+                height: 40px;
+                border-radius: 64px;
+                position: absolute;
+                background: #111;
+                z-index: 3;
+                padding: 0.5rem 0.5rem;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+                opacity: 0;
+                flex-direction: column;
+                justify-content: space-around;
+                align-items: center;
             }
 
             .fac a {
@@ -145,13 +136,13 @@
             }
 
             input {
-            height: 100%;
-            width: 100%;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            position: absolute;
-            z-index: 5;
-            opacity: 0;
+                height: 100%;
+                width: 100%;
+                border-radius: var(--border-radius);
+                cursor: pointer;
+                position: absolute;
+                z-index: 5;
+                opacity: 0;
             }
 
             input:checked ~ .fab {
@@ -159,11 +150,11 @@
             }
 
             input:checked ~ .fac {
-            width: 40px;
-            height: 150px;
-            animation: fac-animation 0.4s ease-out forwards 0.1s;
-            bottom: -180px;
-            opacity: 1;
+                margin-right: 200%;
+                width: 250%;
+                height: 100%;
+                animation: fac-animation 0.4s ease-out forwards 0.1s;
+                opacity: 1;
             }
 
             @keyframes fab-animation {
@@ -222,6 +213,20 @@
         <div class="container">
             <div class="extension">
                 <div class="btn1_container" id="customSwitch">
+
+                    <div class="wrapper">
+                        <input type="checkbox"/>
+                        <div class="fab"></div>
+                        <div class="fac">
+                        <a href="/pages/settings.html"><img src="icons8-anonyme-32.png" alt=""></i></a>
+                        <a href="/pages/tmpmail.html"><img src="icons8-courrier-32.png"/></i></a>
+                        <!-- j'ai failli explosé mon clavier pour ces 2 petits boutons de merde, je n'ai donc pas fait d'effort c'est moche et m'en fou :D (en plus ca mene a rien ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah)-->
+                        </div>
+                    </div>
+
+
+
+
                     <p id="comment" class="comment">my ASS is open 🍑</p>
                     <label class="flipBtn" for="switch" >    
 
@@ -231,8 +236,9 @@
 
                     <span class="circle"></span>
                     <div id="Headers-container">
-                        <p id="Headers"></p>
+                        <p id="Headers" class="header"></p>
                     </div>
+
                     <button class="header_button" id="copy">
                         Header
                     </button>
@@ -263,7 +269,7 @@
             }
             
             .btn1_container {
-                width: 300px;
+                width: 400px;
                 height: 250px;
                 background-color: black;
                 display: flex;
@@ -324,7 +330,6 @@
         </style>
 
         <style>
-
             
             button {
                 position: relative;
