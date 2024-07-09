@@ -1,286 +1,427 @@
-<html>
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta http-equiv="Content-Security-Policy" content="script-src 'nonce-EDNnf03nceIOfn39fn3e9h3sdfa'">
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton+SC&display=swap" rel="stylesheet">
+
 </head>
-
-<body>
-    
-    <div class="nav">
-        <div class="title">
-            <img src="/peche.png" alt="Une sacré pêche mon gourmand ehe :3">
-            <span id="titre">ProtektUrAss</span>
-        </div>
-        <div class="settings">
-            <div id="button">
-                <div class="slider one"></div>
-                <div class="slider two"></div>
-                <div class="slider three"></div>
-            </div>      
-        </div>
-    </div>
-
-    <div id="mainpage" style="display: block;">
-        <div class="extension">
-            <p class="comment">MY ASS IS OPEN 🍑</p>
-            <div id="customSwitch" class="switch">
-                <input type="checkbox" id="switch" /><label for="switch"></label>
+    <body>
+        <div class="header">
+            <div class="title">
+                <img src="./peche.png" id="logo" alt="Une sacré pêche mon gourmand ehe :3">
+                <span id="titre">ProtektUrAss</span>
+            </div>    
+            
+            <div class="wrapper">
+                <input type="checkbox" />
+                <div class="fab"></div>
+                <div class="fac">
+                <a href="/pages/settings.html"><img src="icons8-anonyme-32.png" alt=""></i></a>
+                <a href="/pages/tmpmail.html"><img src="icons8-courrier-32.png"/></i></a>
+                <!-- j'ai failli explosé mon clavier pour ces 2 petits boutons de merde, je n'ai donc pas fait d'effort c'est moche et m'en fou :D (en plus ca mene a rien ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah)-->
+                </div>
             </div>
-            <div id="Headers-container">
-                <p id="Headers"></p>
-            </div>
-        
-            <button id="copy">Copy all Headers</button>
-            <div id="custom-alert" style="display: none;"></div>
         </div>
-    </div>
-    <div id="setting_page" style="display: none;"></div></div>
-    
 
-    <style>
-
-    /* ***** CSS pour les fonction de l'app ***** */
+        <!-- CSS FOR TITLE -->
+        <style>
+            .title{
+                display: flex;
+                align-items: center;
+            }
+            
+            #logo {
+                width: 50px;
+                height: auto;
+                position: static;
+                top : 5px;
+                left: 5px;
+                vertical-align: middle;
+            }
         
-        .nav {
-            display: flex;
-            align-items: center;
-        }
-        
-        .settings {
-            margin-left: auto;
-        }
+            #titre {
+                font-size: 20px;
+                font-style: oblique;
+                color: #fd4b85;
+                display: contents;
+                margin-top: 3px;
+            }
 
-        .title{
-            display: flex;
-            align-items: center;
-        }
+            .header {
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 10px;
+            }
+        </style>
+        <!-- CSS FOR TITLE -->
 
-        #custom-alert {
-          position: fixed;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          background-color: #f8f9fa;
-          color: #333;
-          padding: 15px 20px;
-          border-radius: 8px;
-          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-          z-index: 9999;
-        }
-        #copy {
-          padding: 10px 20px;
-          background-color: #64490a;
-          color: #fff;
-          border: none;
-          border-radius: 5px;
-          box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
-          cursor: pointer;
-        }
-        
-        #copy:hover {
-          background-color: #d69b10;
-        }
+        <!-- CSS FOR DROPDOWN -->
+        <style>
+            :root {
+            --background: #111;
+            --icon-color: #ff6f4b;
+            --width: 50px;
+            --height: 50px;
+            --border-radius: 100%;
+            }
 
-        .comment {
-          font-size: 15 px;
-          color: #333;
-        }
-
-        #Headers-container {
-          margin: 20px auto;
-          padding: 20px;
-          background-color: #f8f9fa;
-          border-radius: 8px;
-          box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
-          max-width: 400px;
-        }
-        
-        #Headers {
-          color: #333;
-          font-weight: bold;
-          text-transform: uppercase;
-        }
-
-        .extension {
-            width: 300px;
-            height: 420px;
+            .wrapper {
+            width: var(--width);
+            height: var(--height);
+            position: relative;
+            border-radius: var(--border-radius);
             display: flex;
             justify-content: center;
-            flex-direction: column;
             align-items: center;
-        }
+            margin-top: 6rem;
+            }
 
-        img {
-            width: 50px;
-            height: auto;
-            position: static;
-            top : 5px;
-            left: 5px;
-            vertical-align: middle;
-        }
+            .fab {
+            background: var(--background);
+            width: var(--width);
+            height: var(--height);
+            position: relative;
+            z-index: 3;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: fab-animation-reverse 0.4s ease-out forwards;
+            }
 
-        #titre {
-            font-size: 20px;
-            font-style: oblique;
-            color: #fd4b85;
-            display: contents;
-            margin-top: 3px;
-        }
-
-        .checkbox {
-            display: none;
-        }
-
-        input[type=checkbox]{
-            height: 0;
-            width: 0;
-            visibility: hidden;
-        }
-
-        label {
-            cursor: pointer;
-            text-indent: -9999px;
-            width: 105px;
-            height: 50px;
-            background: grey;
+            .fab::before,
+            .fab::after {
+            content: "";
             display: block;
-            border-radius: 60px;
-            position: relative;
-        }
-
-        label:after {
-            content: '';
             position: absolute;
-            top: 3px;
-            left: 3px;
-            width: 44px;
-            height: 44px;
-            background: #fff;
-            border-radius: 44px;
-            transition: 0.3s;
-        }
-
-        input:checked + label {
-            background: #fd4b85;
-        }
-
-        input:checked + label:after {
-            left: calc(100% - 3px);
-            transform: translateX(-100%);
-        }
-
-        #button {
-            width: 42px;
-            height: 42px;
-            -webkit-box-sizing: border-box;
-            -moz-box-sizing: border-box;
-            box-sizing: border-box;
-            padding: 14px 10px;
-            position: relative;
-            cursor: pointer;
-            zoom: 150%;
-        }
-        #button.close .one {
-            -webkit-transform: translate3d(4px, 1px, 0) rotate(45deg);
-            -moz-transform: translate3d(4px, 1px, 0) rotate(45deg);
-            -o-transform: translate3d(4px, 1px, 0) rotate(45deg);
-            -ms-transform: translate3d(4px, 1px, 0) rotate(45deg);
-            transform: translate3d(4px, 1px, 0) rotate(45deg);
-            width: 18px;
-        }
-        #button.close .three {
-            -webkit-transform: translate3d(5px, -1px, 0) rotate(-45deg);
-            -moz-transform: translate3d(5px, -1px, 0) rotate(-45deg);
-            -o-transform: translate3d(5px, -1px, 0) rotate(-45deg);
-            -ms-transform: translate3d(5px, -1px, 0) rotate(-45deg);
-            transform: translate3d(5px, -1px, 0) rotate(-45deg);
-            width: 18px;
-        }
-        #button.close .two {
-            width: 0;
-        }
-        #button.close .slider:before {
-            width: 0;
-            height: 0;
-        }
-        .slider {
-            width: 22px;
             border-radius: 4px;
-            height: 2px;
-            background: #fd4b85;
+            background: #ff6f4b;
+            }
+
+            .fab::before {
+            width: 4px;
+            height: 18px;
+            }
+
+            .fab::after {
+            width: 18px;
+            height: 4px;
+            }
+
+            .fac {
+            /* floating actions container */
+            width: 40px;
+            height: 150px;
+            border-radius: 64px;
             position: absolute;
-            -webkit-transform-origin: 2px 2px;
-            -moz-transform-origin: 2px 2px;
-            -o-transform-origin: 2px 2px;
-            -ms-transform-origin: 2px 2px;
-            transform-origin: 2px 2px;
-            -webkit-transition: all 500ms cubic-bezier(0, 1, 0, 1);
-            -moz-transition: all 500ms cubic-bezier(0, 1, 0, 1);
-            -o-transition: all 500ms cubic-bezier(0, 1, 0, 1);
-            -ms-transition: all 500ms cubic-bezier(0, 1, 0, 1);
-            transition: all 500ms cubic-bezier(0, 1, 0, 1);
-        }
-        .slider:before {
-            width: 6px;
-            height: 6px;
-            margin-top: -2px;
-            margin-left: -3px;
-            border-radius: 999px;
-            background: #fd4b85;
-            display: inline-block;
-            content: ' ';
+            background: #111;
+            z-index: 2;
+            padding: 0.5rem 0.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+            opacity: 0;
+            bottom: -110px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            transition: opacity 0.2s ease-in, bottom 0.2s ease-in, width 0.1s ease-in;
+            }
+
+            .fac a {
+            opacity: 0.8;
+            }
+
+            .fac a:hover {
+            transition: 0.2s;
+            opacity: 1;
+            color: darken(#344955, 2%);
+            }
+
+            input {
+            height: 100%;
+            width: 100%;
+            border-radius: var(--border-radius);
+            cursor: pointer;
             position: absolute;
-            left: 70%;
-            -webkit-transition: left 140ms cubic-bezier(0, 2, 1, 1);
-            -moz-transition: left 140ms cubic-bezier(0, 2, 1, 1);
-            -o-transition: left 140ms cubic-bezier(0, 2, 1, 1);
-            -ms-transition: left 140ms cubic-bezier(0, 2, 1, 1);
-            transition: left 140ms cubic-bezier(0, 2, 1, 1);
-        }
-        #button:hover .slider:before {
-            left: 30%;
-        }
-        .slider.two {
-            margin-top: 6px;
-        }
-        .slider.two:before {
-            left: 30%;
-            -webkit-transition-delay: 55ms;
-            -moz-transition-delay: 55ms;
-            -o-transition-delay: 55ms;
-            -ms-transition-delay: 55ms;
-            transition-delay: 55ms;
-        }
-        #button:hover .slider.two:before {
-            left: 70%;
-        }
-        .slider.three {
-            margin-top: 12px;
-        }
-        .slider.three:before {
-            left: 70%;
-            -webkit-transition-delay: 110ms;
-            -moz-transition-delay: 110ms;
-            -o-transition-delay: 110ms;
-            -ms-transition-delay: 110ms;
-            transition-delay: 110ms;
-        }
-        #button:hover .slider.three:before {
-            left: 30%;
-        }
+            z-index: 5;
+            opacity: 0;
+            }
+
+            input:checked ~ .fab {
+            animation: fab-animation 0.4s ease-out forwards;
+            }
+
+            input:checked ~ .fac {
+            width: 40px;
+            height: 150px;
+            animation: fac-animation 0.4s ease-out forwards 0.1s;
+            bottom: -180px;
+            opacity: 1;
+            }
+
+            @keyframes fab-animation {
+            0% {
+                transform: rotate(0) scale(1);
+            }
+            20% {
+                transform: rotate(60deg) scale(0.93);
+            }
+            55% {
+                transform: rotate(35deg) scale(0.97);
+            }
+            80% {
+                transform: rotate(48deg) scale(0.94);
+            }
+            100% {
+                transform: rotate(45deg) scale(0.95);
+            }
+            }
+
+            @keyframes fab-animation-reverse {
+            0% {
+                transform: rotate(45deg) scale(0.95);
+            }
+            20% {
+                transform: rotate(-15deg);
+            }
+            55% {
+                transform: rotate(10deg);
+            }
+            80% {
+                transform: rotate(-3deg);
+            }
+            100% {
+                transform: rotate(0) scale(1);
+            }
+            }
+
+            @keyframes fac-animation {
+            0% {
+                transform: scale(1, 1);
+            }
+            33% {
+                transform: scale(0.95, 1.05);
+            }
+            66% {
+                transform: scale(1.05, 0.95);
+            }
+            100% {
+                transform: scale(1, 1);
+            }
+            }
+        </style>
+        <!-- CSS FOR DROPDOWN -->
+        
+        <div class="container">
+            <div class="extension">
+                <div class="btn1_container">
+                    <p id="comment" class="comment">my ASS is open 🍑</p>
+                    <label class="flipBtn">    
+
+                    <input  type="checkbox" id="switch"/>
+                        <div class="btn"></div> 
+                    </label>
+
+                    <span class="circle"></span>
+                    <div id="Headers-container">
+                        <p id="Headers"></p>
+                    </div>
+                    <button class="header_button" id="copy">
+                        Header
+                    </button>
+                    <div id="custom-alert" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
 
 
-    </style>
+        <!-- CSS BUTTON -->
+        
+        <style>
+            * {
+                padding: 0;
+                margin: 0;
+                box-sizing: border-box;
+            }
+            
+            .container {
+                width: 500px;
+                height: 400px;
+                overflow: hidden;
+                background-color: #fff;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            
+            .btn1_container {
+                width: 300px;
+                height: 250px;
+                background-color: black;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                position: relative;
+                box-shadow: -1px 3px 22px 0px rgba(0, 0, 0, 0.75);
+                background-image: linear-gradient(315deg, 	#262121 0%, 	#262121 84%);
+                border-radius: 20px;
+                gap: 10px;
+            }
+            
+            .flipBtn {
+                width: 150px;
+                height: 54px;
+                background-color: #fff;
+                border-radius: 50px;
+                position: relative;
+                border: 2px solid #111;
+                position: relative;
+                z-index: 10;
+            }
+            
+            .btn {
+                width: 50px;
+                height: 50px;
+                border-radius: 50px;
+                background-color: 	#ff6f4b;
+                position: absolute;
+                left: 0px;
+                transition: all 300ms ease;
+                z-index: 10;
+                overflow: hidden;
+                border: 2px solid #fff;
+            }
+            
+            .move {
+                left: 97px;
+                background-image: linear-gradient(315deg, 	#ffbead 0%, 	#ff6f4b 84%);
+            }
+            
+            .circle {
+                width: 20px;
+                height: 20px;
+                background-image: linear-gradient(315deg, 	#ffbead 0%, 	#ff6f4b 84%);
+                position: absolute;
+                z-index: 2;
+                transition: all 300ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            }
+            
+            .expand {
+                width: 100%;
+                height: 100%;
+                border-radius: 20px;
+            }
+        
+        </style>
 
-    <!-- For the settings button -->
-    <script nonce="EDNnf03nceIOfn39fn3e9h3sdfa" src="settings.js"></script>
-    <!-- For the switch button -->
-    <script nonce="EDNnf03nceIOfn39fn3e9h3sdfa" src="switch.js"></script>
-    <!-- For the extention -->
-    <script nonce="EDNnf03nceIOfn39fn3e9h3sdfa" src="popup.js"></script>
+        <style>
+            button {
+                position: relative;
+                padding: 10px 20px;
+                border-radius: 7px;
+                border: 1px solid #fff;
+                font-size: 14px;
+                text-transform: uppercase;
+                font-weight: 600;
+                letter-spacing: 2px;
+                background: transparent;
+                color: #fff;
+                overflow: hidden;
+                box-shadow: 0 0 0 0 transparent;
+                -webkit-transition: all 0.2s ease-in;
+                -moz-transition: all 0.2s ease-in;
+                transition: all 0.2s ease-in;
+                z-index: 10;
+            }
 
-</body>
+            button:hover {
+                background: #ff6f4b;
+                box-shadow: 0 0 30px 5px #ff6f4b;
+                -webkit-transition: all 0.2s ease-out;
+                -moz-transition: all 0.2s ease-out;
+                transition: all 0.2s ease-out;
+            }
 
+            button:hover::before {
+                -webkit-animation: sh02 0.5s 0s linear;
+                -moz-animation: sh02 0.5s 0s linear;
+                animation: sh02 0.5s 0s linear;
+            }
+
+            button::before {
+                content: '';
+                display: block;
+                width: 0px;
+                height: 86%;
+                position: absolute;
+                top: 7%;
+                left: 0%;
+                opacity: 0;
+                background: #fff;
+                box-shadow: 0 0 50px 30px #fff;
+                -webkit-transform: skewX(-20deg);
+                -moz-transform: skewX(-20deg);
+                -ms-transform: skewX(-20deg);
+                -o-transform: skewX(-20deg);
+                transform: skewX(-20deg);
+            }
+
+            @keyframes sh02 {
+            from {
+                opacity: 0;
+                left: 0%;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+                left: 100%;
+            }
+            }
+
+            button:active {
+                box-shadow: 0 0 0 0 transparent;
+                -webkit-transition: box-shadow 0.2s ease-in;
+                -moz-transition: box-shadow 0.2s ease-in;
+                transition: box-shadow 0.2s ease-in;
+            }
+
+        </style>
+
+        <!-- CSS BUTTON -->
+
+        <style>
+            .comment {
+                font-family: "Anton SC", sans-serif;
+                font-weight: 400;
+                font-size: larger;
+                font-style: normal;
+                color: #fff;
+                z-index: 10;
+            }
+        </style>
+
+
+
+        
+            <!-- For the settings button -->
+            <!-- <script nonce="EDNnf03nceIOfn39fn3e9h3sdfa" src="onglet.js"></script> -->
+            <!-- For the tabs -->
+            <script nonce="EDNnf03nceIOfn39fn3e9h3sdfa" src="test.js"></script>
+            <!-- For the extention -->
+            <script nonce="EDNnf03nceIOfn39fn3e9h3sdfa" src="popup.js"></script>
+        
+        
+    </body>
 </html>
