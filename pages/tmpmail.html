@@ -2,19 +2,174 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy" content="script-src 'nonce-EDNnf03nceIOfn39fn3e9h3sdfa'">
-    <title>API Example</title>
 </head>
 <body>
-    <h1>TEMP Mail</h1>
-    <button id="create">Create Mailbox</button>
-    <button id="refresh">View Mails</button>
+    <svg viewbox="0 0 100 20">
+        <defs>
+            <linearGradient id="gradient">
+                <stop offset="0%" stop-color="#ff6f4b" />
+                <stop offset="100%" stop-color="#ff6f4b" />
+            </linearGradient>
+          <pattern id="wave" x="0" y="-0.5" width="100%" height="100%" patternUnits="userSpaceOnUse">
+            <path id="wavePath" d="M-40 9 Q-30 7 -20 9 T0 9 T20 9 T40 9 T60 9 T80 9 T100 9 T120 9 V20 H-40z" mask="url(#mask)" fill="url(#gradient)"> 
+              <animateTransform
+                  attributeName="transform"
+                  begin="0s"
+                  dur="1.5s"
+                  type="translate"
+                  from="0,0"
+                  to="40,0"
+                  repeatCount="indefinite" />
+            </path>
+          </pattern>
+        </defs>
+        <text class="text" text-anchor="middle" x="50" y="15" font-size="17" fill="#ff6f4b" fill-opacity="0.1">TMP MAIL</text>
+        <text class="text" text-anchor="middle" x="50" y="15" font-size="17" fill="url(#wave)"  fill-opacity="1">TMP MAIL</text>
+    </svg>
+    <div class="button_tmp">
+        <button id="create">
+            <span>Create</span>
+            <div class="liquid"></div>
+        </button>
+        <button id="refresh">
+            <span>Refresh</span>
+            <div class="liquid"></div>
+        </button>
+    </div>
+
+
     <br></br>
-    <div id="actual-mail"></div>
+    <div class="text" id="actual-mail"></div>
     
     <!-- Containers for displaying results -->
-    <div id="apiResults"></div>
+    <div class="text" id="apiResults"></div>
+      
+
+
+    <style>
+        
+        /* titre */
+
+        .text{
+            font-size: larger;
+            align-items: center;
+            color: white;
+        }
+
+        @import url(https://fonts.googleapis.com/css?family=Cabin+Condensed);
+
+        body,html{margin:0;padding:0;width: 100%;height: 100%;}
+        body{
+            width: 100%;
+            height: 35%;
+            background: #111;
+            background-size:cover;
+            font-family: 'Cabin Condensed', sans-serif;
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
+        }
+        svg{
+            align-items: center;
+            font-weight:bold;
+            max-width:600px;
+        }
+
+        /* button */
+
+        .button_tmp {
+            display: flex;
+            flex-direction: row;
+            gap: 60px;
+        }
+
+        button {
+            position: relative;
+            padding: 20px 50px;
+            display: block;
+            text-decoration: none;
+            text-transform: uppercase;
+            width: 100%;
+            overflow: hidden;
+            border-radius: 40px;
+            cursor: pointer;
+        }
+
+        button span {
+            position: relative;
+            color: #111;
+            font-size: 20px;
+            font-family: Arial;
+            letter-spacing: 8px;
+            z-index: 1;
+        }
+
+        button .liquid {
+            position: absolute;
+            top: -80px;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            background: #ff6f4b;
+            box-shadow: inset 0 0 50px #f1f1f1;
+            transition: .5s;
+        }
+
+        button .liquid::after,
+        button .liquid::before {
+            content: '';
+            width: 200%;
+            height: 200%;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translate(-50%, -75%);
+            background: #f1f1f1;
+        }
+
+        button .liquid::before {
+        
+            border-radius: 45%;
+            background: #f1f1f1;
+            animation: animate 5s linear infinite;
+        }
+
+        button .liquid::after {
+        
+            border-radius: 40%;
+            background: #ff6f4b;
+            opacity: 0.1;
+            animation: animate 10s linear infinite;
+        }
+
+        button:hover .liquid{
+            top: -120px;
+        }
+
+        @keyframes animate {
+        0% {
+            transform: translate(-50%, -75%) rotate(0deg);
+        }
+        100% {
+            transform: translate(-50%, -75%) rotate(360deg);
+        }
+        }
+
+    </style>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     <!-- putain j'ai mis 6h à comprendre que il fallait le mettre dans un ptn de file pour quil s'execute.... putain de manifest v3 et de mesure anti ADblock... -->
     <script nonce="EDNnf03nceIOfn39fn3e9h3sdfa" src="JS/mail.js"></script>

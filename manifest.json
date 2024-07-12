@@ -25,9 +25,9 @@
     ]
   },
   "icons": {
-    "16": "peche.png",
-    "48": "peche.png",
-    "128": "peche.png"
+    "16": "./img/peche.png",
+    "48": "./img/peche.png",
+    "128": "./img/peche.png"
   },
   "action": {
     "default_popup": "index.html"
