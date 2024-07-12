@@ -12,6 +12,8 @@ function changeText() {
     var comment = document.getElementById("comment");
 
     if (checkbox.checked) {
+        circle.classList.remove("displayoff")
+
 
         chrome.storage.sync.set({'etat_switch': true})
         comment.textContent = "ANONYME 🥷🏻";
@@ -19,6 +21,8 @@ function changeText() {
         //animation JS
         btn.classList.add("move");
         circle.classList.add("expand")
+
+
         
     } else {
 
@@ -28,6 +32,8 @@ function changeText() {
         //animation JS
         btn.classList.remove("move");
         circle.classList.remove("expand")
+        circle.classList.add("displayoff")
+
         
     }
 

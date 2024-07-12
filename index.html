@@ -8,28 +8,23 @@
 
 </head>
     <body>
-        <div class="header">
-            <div class="title">
-                <img src="./peche.png" id="logo" alt="Une sacré pêche mon gourmand ehe :3">
-                <span id="titre">ProtektUrAss</span>
-            </div>    
-            
-        </div>
+
 
         <!-- CSS FOR TITLE -->
         <style>
             .title{
                 display: flex;
                 align-items: center;
+                text-shadow: 0.5px 0.5px 1px black;
             }
             
             #logo {
                 width: 50px;
                 height: auto;
-                position: static;
                 top : 5px;
                 left: 5px;
                 vertical-align: middle;
+
             }
         
             #titre {
@@ -38,6 +33,9 @@
                 color: #fd4b85;
                 display: contents;
                 margin-top: 3px;
+                font-size: 25px;
+
+
             }
 
             .header {
@@ -46,6 +44,7 @@
                 justify-content: space-between;
                 align-items: center;
                 padding: 10px;
+                z-index: 9999;
             }
         </style>
         <!-- CSS FOR TITLE -->
@@ -92,21 +91,21 @@
 
             .fab::before,
             .fab::after {
-            content: "";
-            display: block;
-            position: absolute;
-            border-radius: 4px;
-            background: #ff6f4b;
+                content: "";
+                display: block;
+                position: absolute;
+                border-radius: 4px;
+                background: #ff6f4b;
             }
 
             .fab::before {
-            width: 4px;
-            height: 18px;
+                width: 4px;
+                height: 18px;
             }
 
             .fab::after {
-            width: 18px;
-            height: 4px;
+                width: 18px;
+                height: 4px;
             }
 
             .fac {
@@ -210,16 +209,25 @@
         </style>
         <!-- CSS FOR DROPDOWN -->
         
-        <div class="container">
             <div class="extension">
                 <div class="btn1_container" id="customSwitch">
+
+
+                    <div class="header">
+                        <div >
+                            <img  src="./img/peche.png" id="logo" alt="Une sacré pêche mon gourmand ehe :3">
+                            <span class="title" id="titre">ProtektUrAss</span>
+                        </div>    
+                        
+                    </div>
+
 
                     <div class="wrapper">
                         <input type="checkbox"/>
                         <div class="fab"></div>
                         <div class="fac">
-                        <a href="/pages/settings.html"><img src="icons8-anonyme-32.png" alt=""></i></a>
-                        <a href="/pages/tmpmail.html"><img src="icons8-courrier-32.png"/></i></a>
+                        <a href="/pages/settings.html"><img src="./img/anon.png" alt=""></i></a>
+                        <a href="/pages/tmpmail.html"><img src="./img/mail.png"/></i></a>
                         <!-- j'ai failli explosé mon clavier pour ces 2 petits boutons de merde, je n'ai donc pas fait d'effort c'est moche et m'en fou :D (en plus ca mene a rien ahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahah)-->
                         </div>
                     </div>
@@ -230,12 +238,13 @@
                     <p id="comment" class="comment">my ASS is open 🍑</p>
                     <label class="flipBtn" for="switch" >    
 
+                        
                     <input  type="checkbox" id="switch" />
                         <div class="btn"></div> 
                     </label>
 
                     <span class="circle"></span>
-                    <div id="Headers-container">
+                    <div id="Headers-container" style="z-index: 999;">
                         <p id="Headers" class="header"></p>
                     </div>
 
@@ -243,9 +252,11 @@
                         Header
                     </button>
                     <div id="custom-alert" style="display: none;"></div>
+                    <br><br>
                 </div>
+                
             </div>
-        </div>
+          
 
 
         <!-- CSS BUTTON -->
@@ -255,48 +266,42 @@
                 padding: 0;
                 margin: 0;
                 box-sizing: border-box;
+                background-color:  linear-gradient(315deg, 	#262121 0%, 	#000000 84%);
             }
-            
 
-            .container {
+            body{
                 width: 500px;
-                height: 400px;
-                overflow: hidden;
-                background-color: #fff;
-                display: flex;
-                justify-content: center;
-                align-items: center;
             }
+        
             
             .btn1_container {
-                width: 400px;
-                height: 250px;
+                width: 100%;
+                height: 100%;
                 background-color: black;
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
                 position: relative;
-                box-shadow: -1px 3px 22px 0px rgba(0, 0, 0, 0.75);
-                background-image: linear-gradient(315deg, 	#262121 0%, 	#262121 84%);
-                border-radius: 20px;
+                background-image: linear-gradient(315deg, 	#262121 0%, 	#000000 84%);
                 gap: 10px;
             }
             
             .flipBtn {
                 width: 150px;
-                height: 54px;
+                height: 58px;
                 background-color: #fff;
                 border-radius: 50px;
                 position: relative;
                 border: 2px solid #111;
                 position: relative;
                 z-index: 10;
+                margin-bottom: 17px;
             }
             
             .btn {
-                width: 50px;
-                height: 50px;
+                width: 54px;
+                height: 54px;
                 border-radius: 50px;
                 background-color: 	#ff6f4b;
                 position: absolute;
@@ -324,9 +329,17 @@
             .expand {
                 width: 100%;
                 height: 100%;
-                border-radius: 20px;
+                z-index: 1;
             }
         
+            .displayon {
+                visibility: visible;
+            }
+
+
+            .displayoff {
+                visibility: hidden;
+            }
         </style>
 
         <style>
@@ -413,7 +426,7 @@
             .comment {
                 font-family: "Anton SC", sans-serif;
                 font-weight: 400;
-                font-size: larger;
+                font-size: 30px;
                 font-style: normal;
                 color: #fff;
                 z-index: 10;
