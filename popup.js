@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Récupère la référence de l'élément switch par son ID
   var customSwitch = document.getElementById('customSwitch');
 
+
   console.log(customSwitch)
 
   // Vérifie si l'élément a été trouvé avant d'ajouter l'écouteur d'événements
@@ -12,6 +13,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
       if (checkbox.checked) {
         var isSwitchOn = true;
+
+
 
       }else{
 
@@ -97,17 +100,35 @@ chrome.storage.sync.get('etat_switch', function(data) {
 
   console.log('switchON : '+ isSwitchOn)
   var checkbox = document.getElementById("switch"); 
+  const btn = document.querySelector(".btn");
+  const circle = document.querySelector(".circle");
+  var comment = document.getElementById("comment");
+
 
   if (isSwitchOn == true) {
 
     chrome.storage.sync.set({ 'etat_switch': true });
     checkbox.checked = true
+
+
+    //animation JS ici aussi pour quand on rouvre l'app le btn soit synchro
+    comment.textContent = "ANONYME 🥷🏻";
+
+    btn.classList.add("move");
+    circle.classList.add("expand")
   }
 
   else {
 
     chrome.storage.sync.set({ 'etat_switch': false });
     checkbox.checked = false
+
+
+    //animation JS
+    comment.textContent = "MY ASS IS OPEN 🍑";
+
+    btn.classList.remove("move");
+    circle.classList.remove("expand")
 
   }
 });

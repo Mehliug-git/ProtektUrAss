@@ -1,16 +1,15 @@
 <html>
 <head>
-  <meta http-equiv=\"Content-Security-Policy\" content=\"script-src 'nonce-EDNnf03nceIOfn39fn3e9h3sdfa'\">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="script-src 'nonce-EDNnf03nceIOfn39fn3e9h3sdfa'">
 </head>
 
 <div id='setting_page' style='display: block;'>
     <h1>Settings</h1>
-    <div id='tmp-mail' style='display: none;'></div>
     <div id='Headers'></div>
     
-    <button id="tempMailButton">Temp Mail</button>
-
-    <div class="dropdown">
+    <div class="box">
       <select id="options">
           <option value="">--PC par défaut--</option>
           <option value="PC">PC</option>
@@ -22,7 +21,7 @@
   </div>
 
 
-  <script nonce="EDNnf03nceIOfn39fn3e9h3sdfa" src="pages/JS/param.js"></script>
+  <script nonce="EDNnf03nceIOfn39fn3e9h3sdfa" src="./JS/param.js"></script>
 
 
 
@@ -40,57 +39,71 @@
 
 
 <style>
-/* Style du bouton */
-.dropbtn {
-  background-color: #4CAF50;
+
+
+
+h1 {
+
+  align-items: center;
+  color: white;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #111;
+  width: 350px;
+  height: 350px;
+}
+
+.box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.box select {
+  background-color: #ff6f4b;
   color: white;
   padding: 12px;
-  font-size: 16px;
+  width: 250px;
   border: none;
-  cursor: pointer;
+  font-size: 20px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+  -webkit-appearance: button;
+  appearance: button;
+  outline: none;
+  border-radius: 20px;
+
 }
 
-/* Style du bouton au survol */
-.dropbtn:hover, .dropbtn:focus {
-  background-color: #3e8e41;
-}
-
-/* Style du conteneur dropdown */
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-/* Style du contenu dropdown (liste des options) */
-.dropdown-content {
-  display: none;
+.box::before {
+  content: "\f13a";
+  font-family: FontAwesome;
   position: absolute;
-  background-color: #f9f9f9;
-  min-width: 160px;
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-  z-index: 1;
+  top: 0;
+  right: 0;
+  width: 20%;
+  height: 100%;
+  text-align: center;
+  font-size: 28px;
+  line-height: 45px;
+  color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 255, 255, 0.1);
+  pointer-events: none;
+
 }
 
-/* Style des liens à l'intérieur du dropdown */
-.dropdown-content a {
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
+
+.box:hover::before {
+  color: rgba(255, 255, 255, 0.6);
+  background-color: rgba(255, 255, 255, 0.2);
+  
+  
 }
 
-/* Style des liens au survol */
-.dropdown-content a:hover {background-color: #f1f1f1;}
 
-/* Afficher le contenu dropdown au survol */
-.dropdown:hover .dropdown-content {
-  display: block;
-}
 
-/* Afficher le contenu dropdown lorsque le bouton a le focus */
-.dropdown:focus .dropdown-content {
-  display: block;
-}
+
 </style>
-
-</html>

@@ -1,10 +1,3 @@
-var tempMailButton = document.getElementById('tempMailButton');
-tempMailButton.addEventListener('click', function() {
-    window.location.href = 'pages/tmpmail.html';
-});
-    
-
-
 //Pour le choix des UA
 var selectElement = document.getElementById('options');
 
@@ -17,4 +10,3 @@ selectElement.addEventListener('change', function () {
         });
     }
 });
-

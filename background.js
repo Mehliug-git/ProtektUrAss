@@ -17,11 +17,6 @@ chrome.runtime.onInstalled.addListener(function() {
 
 */
 
-//met le mode de fonctionnement sur le choix user
-chrome.storage.sync.get(['UAtype'], (result) => {
-  BaseOS = result.UAtype 
-  console.log("BaseOS choisi : " + BaseOS)   
-});
 
 
 
@@ -54,30 +49,42 @@ chrome.action.onClicked.addListener(function() {
 // declaration en globale pour pas que il soit limiter au bloc et pouvoir le renvoyer dans la console user
 let randomUserAgent
 let final
-let CustomHeaderUA
+
 
 
 // listen event webRequest for intercept request
-function changeHeaderListener(details) {
+function changeHeaderListener() {
+      let CustomHeaderUA
+      let varOS
+      let secchuamobile
+      let acceptlanguage
+      let acceptvalue
+      let newRules
 
 
-    // Modifie le User-Agent dans les en-têtes de la requête
-    for (var i = 0; i < details.requestHeaders.length; ++i) {
+      //met le mode de fonctionnement sur le choix user
+      chrome.storage.sync.get(['UAtype'], (result) => {
+        BaseOS = result.UAtype 
+        console.log("BaseOS choisi : " + BaseOS)   
+      });
 
+
+
+
+
+      // Modifie le User-Agent dans les en-têtes de la requête
       // definie dans une var l'actuel type de device pour changement header cohérent
-      if (details.requestHeaders[i].name === 'sec-ch-ua-platform') {
-        //For OS detection
-        const os_list = ["Android", "Chrome OS", "Chromium OS", "iOS", "macOS", "Windows", "Unknown"]; //tout sauf linux casse les couilles 
-        var randomOS = Math.floor(Math.random() * os_list.length);
-        details.requestHeaders[i].value = os_list[randomOS];
+      //For OS detection
+      const os_list = ["Android", "Chrome OS", "Chromium OS", "iOS", "macOS", "Windows", "Unknown"]; //tout sauf linux casse les couilles 
+      var randomOS = Math.floor(Math.random() * os_list.length);
+      
+      varOS = os_list[randomOS]
         
-      }
+      
 
 
 
       //For useragent
-      if (details.requestHeaders[i].name === 'User-Agent') {
-
         const PCsuserAgent_list = [
         //Windows
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36 Edg/119.0.0.0	",
@@ -225,21 +232,21 @@ function changeHeaderListener(details) {
         console.log('New Headers save in chrome storage : '+ CustomHeaderUA);
       });
         
-      } 
+      
 
-      if (details.requestHeaders[i].name === 'sec-ch-ua-mobile') {
-        //For know if mobile device or not 
-        const mobile_list = ["0", "1"];
-        var randomMobile = Math.floor(Math.random() * mobile_list.length);
-        details.requestHeaders[i].value = mobile_list[randomMobile];
+      // for sec-ch-ua-mobile
+      //For know if mobile device or not 
+      const mobile_list = ["0", "1"];
+      var randomMobile = Math.floor(Math.random() * mobile_list.length);
+      secchuamobile = mobile_list[randomMobile];
         
-      }
-      if (details.requestHeaders[i].name === 'Accept-Language') {
+      
+     // for Accept-Language
         //For Accept-Language most common
-        details.requestHeaders[i].value = "fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7";
+        acceptlanguage = "fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7";
         
-      }
-      if (details.requestHeaders[i].name === 'accept') {
+      
+      //for accept
         //For know if mobile device or not 
         const acceptHeaderValues_list = [
           "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
@@ -254,18 +261,62 @@ function changeHeaderListener(details) {
         ];
         
         var randomAccept = Math.floor(Math.random() * acceptHeaderValues_list.length);
-        details.requestHeaders[i].value = acceptHeaderValues_list[randomAccept];
+        acceptvalue = acceptHeaderValues_list[randomAccept];
         
-      }
-    }
 
- 
+
+        newRules =   [{
+          "id": 1,
+          "priority": 1,
+          "action": {
+            "type": "modifyHeaders",
+            "requestHeaders": [
+              {
+                "operation": "set",
+                "header": "User-Agent",
+                "value": CustomHeaderUA
+              },
+              {
+                "operation": "set",
+                "header": "Sec-Ch-Ua-Platform",
+                "value": varOS
+              },
+              {
+                "operation": "set",
+                "header": "Accept",
+                "value": acceptvalue
+              },
+              {
+                "operation": "set",
+                "header": "Accept-Language",
+                "value": acceptlanguage
+              },
+              {
+                "operation": "set",
+                "header": "sec-ch-ua-mobile",
+                "value": secchuamobile
+              }
+            ]
+          },
+          "condition": {
+            "urlFilter": "*",
+            "resourceTypes": ["main_frame", "sub_frame", "xmlhttprequest"]
+          }
+        }
+        ]
+        updateRules(newRules)
+
+
+
+      }
+
     // Fonction pour mettre à jour les règles directement dans rules.json
     function updateRules(newRules) {
+
       // Structure de l'objet UpdateRequest
       const updateRequest = {
-        addRules: newRules,
         removeRuleIds: [1], // Supprimer l'ancienne regle
+        addRules: newRules,
       };
     
       // Appel  chrome.declarativeNetRequest.updateDynamicRules
@@ -276,59 +327,39 @@ function changeHeaderListener(details) {
           console.log("Les règles ont été MAJ:", newRules);
         }
       });
-    }
-
-    // nouvelles regles 
-      console.log("HMM Bah ouais " + CustomHeaderUA)
-      const newRule =   [{
-        "id": 1,
-        "priority": 1,
-        "action": {
-          "type": "modifyHeaders",
-          "requestHeaders": [
-            {
-              "operation": "set",
-              "header": "User-Agent",
-              "value": CustomHeaderUA
-            },
-            {
-              "operation": "set",
-              "header": "Sec-Ch-Ua-Platform",
-              "value": details.requestHeaders[2].value
-            },
-            {
-              "operation": "set",
-              "header": "Accept",
-              "value": details.requestHeaders[5].value
-            },
-            {
-              "operation": "set",
-              "header": "Accept-Language",
-              "value": "fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7"
-            },
-            {
-              "operation": "set",
-              "header": "sec-ch-ua-mobile",
-              "value": details.requestHeaders[1].value
-            }
-          ]
-        },
-        "condition": {
-          "urlFilter": "*",
-          "resourceTypes": ["main_frame", "sub_frame", "xmlhttprequest"]
-        }
-      }
-      ]
     
-      updateRules(newRule);
 
 
-
-
+      // nouvelles regles 
+      console.log("HMM Bah ouais " + varOS)
+      
+    
     
     //for stop listener after changeHeader if user want to reset headers
-    return { requestHeaders: details.requestHeaders};
+    return { requestHeaders: CustomHeaderUA};
   };
+
+
+
+
+  //si ça marche pas jsuis la reine des putes 
+  // Fonction pour remove les rules
+  function removeRules() {
+    // Structure de l'objet UpdateRequest
+    const updateRequest = {
+      removeRuleIds: [1] // Supprimer l'ancienne regle
+    };
+  
+    // Appel  chrome.declarativeNetRequest.updateDynamicRules
+    chrome.declarativeNetRequest.updateDynamicRules(updateRequest, () => {
+      if (chrome.runtime.lastError) {
+        console.error("Erreur lors du remove des règles :", chrome.runtime.lastError.message);
+      } else {
+        console.log("Les règles ont été viré chef !");
+      }
+    });
+  }
+  
 
 
 //AVEC CA JE CHANGE LE HEADERS 
@@ -339,6 +370,10 @@ chrome.runtime.onInstalled.addListener(() => {
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'BackgroundFunction') {
+    //reset des rules
+    removeRules()
+
+    console.log("BackgroundFunction active !")
    
    // Ajouter l'écouteur pour modifier les en-têtes des requêtes
    chrome.webRequest.onBeforeSendHeaders.addListener(
@@ -351,15 +386,21 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     chrome.declarativeNetRequest.getEnabledRulesets((ruleSets) => {
       sendResponse({ enabledRuleSets: ruleSets });
     });
-
+    
     return true; // Indique que sendResponse sera asynchrone
+
+
   }
-  else {
+  if (request.action === 'StopBackgroundFunction') {
 
     //pour eteindre l'extention
 
+    //vire le listener qui ajoute la regle 
     chrome.webRequest.onBeforeSendHeaders.removeListener(changeHeaderListener);
     sendResponse({ message: 'Header reset !' });
+
+    //reset des rules
+    removeRules()
 
   }
 });
