@@ -25,7 +25,7 @@ function performActionBasedOnSwitchState(isSwitchOn, callback) {
       console.log('Response from background.js:', useragent);
       let JSuseragent = useragent;
       //ChangeJS(JSuseragent); MARCHE PLUS AVEC V3 faut mettre un nonce
-      //remplacé par applyFingerprintSpoof dans background.js, injecté en world MAIN sur chaque navigation (onCommitted), ça contourne le probleme de nonce/CSP direct
+      //remplacé par applyFingerprintSpoof dans background.js, injecté en world MAIN a chaque navigation (onCommitted), ça contourne le bordel de nonce/CSP direct
 
       //on attend que background.js ait fini avant de continuer (callback), sinon le reload plus bas partait trop tot et le vieux header etait encore actif
       if (callback) callback();
@@ -33,9 +33,10 @@ function performActionBasedOnSwitchState(isSwitchOn, callback) {
 
 
     //delete cookies
-    document.cookie.split(";").forEach(function(c) {
-      document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
-    });
+    //enlevé : ça butait les cookies de l'onglet actif JUSTE avant le reload en dessous, du coup ça pouvait tout casser (404, deco...) sur le site ou on est pile au moment ou on allume le switch, pas cool
+    //document.cookie.split(";").forEach(function(c) {
+    //  document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+    //});
 
 
   } else {

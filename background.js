@@ -21,21 +21,8 @@ chrome.runtime.onInstalled.addListener(function() {
 
 
 
-chrome.runtime.onInstalled.addListener(function() {
-  chrome.webNavigation.onBeforeNavigate.addListener(function(details) {
-
-  chrome.scripting.executeScript({
-  target: { tabId: details.tabId },
-  files: ["content.js"]
-}, () => {
-  if (chrome.runtime.lastError) {
-    console.error("Erreur d'injection du script de contenu:", chrome.runtime.lastError);
-  } else {
-    console.log("Script de contenu injecté avec succès");
-  }
-  });
-  });
-});
+// viré : ça réinjectait content.js a la mano a CHAQUE navigation pour rien, le manifest le fait deja tout seul (content_scripts, document_start, <all_urls>)
+// en double comme ça servait a rien, et en plus ça plantait "Erreur d'injection du script de contenu" sur les pages ou on a pas le droit d'injecter (chrome://, Web Store, autres extensions...)
 
 
 chrome.action.onClicked.addListener(function() {
