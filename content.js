@@ -12,27 +12,31 @@ window.addEventListener('beforeunload', function (event) {
 
 
 
-function performActionBasedOnSwitchState(isSwitchOn) {
+function performActionBasedOnSwitchState(isSwitchOn, callback) {
   if (isSwitchOn) {
 
     // Si le switch est ON
     console.log('Switch is ON. LETZ GOOOOOOOOOOOOOOOOOOOO  ' + isSwitchOn);
-    
+
 
     //change useragent from Header
     // Call the funciton in background.js
-    chrome.runtime.sendMessage({ action: 'BackgroundFunction' }, function(useragent) { // pas chrome.tabs mais chrome.runtime car on envoie le msg a background 
+    chrome.runtime.sendMessage({ action: 'BackgroundFunction' }, function(useragent) { // pas chrome.tabs mais chrome.runtime car on envoie le msg a background
       console.log('Response from background.js:', useragent);
       let JSuseragent = useragent;
       //ChangeJS(JSuseragent); MARCHE PLUS AVEC V3 faut mettre un nonce
+      //remplacé par applyFingerprintSpoof dans background.js, injecté en world MAIN sur chaque navigation (onCommitted), ça contourne le probleme de nonce/CSP direct
+
+      //on attend que background.js ait fini avant de continuer (callback), sinon le reload plus bas partait trop tot et le vieux header etait encore actif
+      if (callback) callback();
     });
 
-    
+
     //delete cookies
     document.cookie.split(";").forEach(function(c) {
       document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
     });
-    
+
 
   } else {
     //bah s'il l'est pas connard
@@ -43,6 +47,8 @@ function performActionBasedOnSwitchState(isSwitchOn) {
     chrome.runtime.sendMessage({ action: 'StopBackgroundFunction' }, function(response) {
 
       console.log('Response from background.js:', response);
+
+      if (callback) callback();
     });
 
 
@@ -76,11 +82,12 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     //punnycode check
     punycode()
 
-    //lance les actions en fonction de letat du switch
-    performActionBasedOnSwitchState(isSwitchOn);
-    //reload for take effect hehe
-    window.location.reload();
-    
+    //lance les actions en fonction de letat du switch, PUIS reload une fois que c'est vraiment fini (avant le reload partait direct et le nouveau header n'etait pas encore actif)
+    performActionBasedOnSwitchState(isSwitchOn, function() {
+      //reload for take effect hehe
+      window.location.reload();
+    });
+
   }
 });
 

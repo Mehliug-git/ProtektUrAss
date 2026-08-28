@@ -6,9 +6,10 @@
 </head>
 
 <div id='setting_page' style='display: block;'>
+    <a href="../index.html" class="back-btn">← Retour</a>
     <h1>Settings</h1>
     <div id='Headers'></div>
-    
+
     <div class="box">
       <select id="options">
           <option value="">--PC par défaut--</option>
@@ -54,6 +55,34 @@ body {
   background-color: #111;
   width: 350px;
   height: 350px;
+}
+
+.back-btn {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  color: #ff6f4b;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.back-btn:hover {
+  text-decoration: underline;
+}
+
+/* le carré des headers existait déjà dans le HTML mais rien ne le remplissait ni le stylait, du coup il affichait rien */
+#Headers {
+  background-color: #1a1a1a;
+  border: 1px solid #ff6f4b;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 15px auto 0;
+  width: 250px;
+  font-size: 11px;
+  word-break: break-all;
+  text-align: center;
+  color: #fff;
 }
 
 .box {

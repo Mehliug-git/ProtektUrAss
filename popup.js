@@ -7,7 +7,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Vérifie si l'élément a été trouvé avant d'ajouter l'écouteur d'événements
   if (customSwitch) {
-    customSwitch.addEventListener('change', function() {
+    customSwitch.addEventListener('change', function(event) {
+      // le customSwitch contient AUSSI la checkbox du petit menu déroulant (settings/mail), et son 'change' bubble jusqu'ici
+      // du coup ouvrir juste le menu redéclenchait tout le block en dessous (et reload la page pour rien) si on filtrait pas sur le bon element
+      if (event.target.id !== 'switch') return;
+
       // Récupère la référence de l'élément switch par son ID
       var checkbox = document.getElementById("switch");
 
@@ -28,8 +32,14 @@ document.addEventListener('DOMContentLoaded', function() {
       // Obtient l'onglet actif
       chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
         // Envoie un message à l'onglet actif AKA content.js
-        chrome.tabs.sendMessage(tabs[0].id, { 'etat_switch': isSwitchOn });
-      }); 
+        chrome.tabs.sendMessage(tabs[0].id, { 'etat_switch': isSwitchOn }).catch(function(error) {
+          // ça arrive si l'onglet actif a pas de content script (page chrome://, nouvel onglet, page ouverte avant le chargement de l'extension...)
+          // "Could not establish connection. Receiving end does not exist." sinon ça plantait en Uncaught (in promise) pour rien
+          // dans ce cas on previent quand meme background.js en direct, sinon la protection s'active jamais pour de vrai sur cet onglet
+          console.warn('Onglet actif sans content script, on previent background.js en direct :', error);
+          chrome.runtime.sendMessage({ action: isSwitchOn ? 'BackgroundFunction' : 'StopBackgroundFunction' });
+        });
+      });
     });
   }  
 });
@@ -59,35 +69,46 @@ function customalert(message, time) {
 
 
 //pour afficher le nouveau User-Agent sur popup.html
-chrome.storage.local.get(['newheaders']).then((result) => { 
+chrome.storage.local.get(['newheaders']).then((result) => {
   const new_infos = result.newheaders;
 
 
   // Assigner la valeur à l'élément avec l'id 'Headers' (sous forme de texte)
-  document.getElementById('Headers').innerText = result.newheaders;
+  // avant ça affichait littéralement "undefined" tant que le switch avait jamais été activé, on met un texte correct a la place
+  document.getElementById('Headers').innerText = new_infos ? new_infos : "Aucun header généré pour l'instant, active le switch !";
   console.log("A Afficher sur lextention : " + result.newheaders)
 
-    
+
 
 
 
   //pour le boutton Copier pour avoir tt les infos des changements:
   document.getElementById('copy').addEventListener('click', function() {
 
-    // element textarea temp pour copier le texte
-    var textarea = document.createElement('textarea');
-    textarea.value = new_infos;
-    document.body.appendChild(textarea);
+    if (!new_infos) {
+      customalert("Rien à copier, active d'abord le switch !", 2000);
+      return;
+    }
 
-    // selectionne le txt a mettre dans le clipboard
-    textarea.select();
-    document.execCommand('copy');
+    // navigator.clipboard car document.execCommand('copy') est deprecated et marche plus toujours depuis une popup d'extension
+    navigator.clipboard.writeText(new_infos).then(function() {
+      // affiche un msg pour le user
+      customalert("Infos copiée avec succès !", 2000);
+    }).catch(function() {
+      // fallback si jamais le clipboard API est bloqué : element textarea temp pour copier le texte
+      var textarea = document.createElement('textarea');
+      textarea.value = new_infos;
+      document.body.appendChild(textarea);
 
-    // remove tmp element textarea
-    document.body.removeChild(textarea);
+      // selectionne le txt a mettre dans le clipboard
+      textarea.select();
+      document.execCommand('copy');
 
-    // affiche un msg pour le user
-    customalert("Infos copiée avec succès !", 2000);
+      // remove tmp element textarea
+      document.body.removeChild(textarea);
+
+      customalert("Infos copiée avec succès !", 2000);
+    });
   });
   });
 
@@ -112,7 +133,7 @@ chrome.storage.sync.get('etat_switch', function(data) {
 
 
     //animation JS ici aussi pour quand on rouvre l'app le btn soit synchro
-    comment.textContent = "ANONYME 🥷🏻";
+    comment.textContent = "ANONYME 🍆💦";
 
     btn.classList.add("move");
     circle.classList.add("expand")

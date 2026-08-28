@@ -1,161 +1,135 @@
+// developermail.com est mort (le domaine résout même plus en DNS), tout le tempmail tournait dans le vide
+// remplacé par mail.tm : gratuit, pas de clé API, et les extensions passent au dessus du CORS grace a host_permissions dans le manifest
+
 //pour afficher si un email actuellement enregistrer
-chrome.storage.sync.get(['name', 'token'], (result) => {
-    var email = result.name + "@developermail.com";
+chrome.storage.sync.get(['address'], (result) => {
+    const actualmail = document.getElementById('actual-mail');
 
-
-    if (email != null) {
-        const actualmail = document.getElementById('actual-mail')
-        actualmail.innerHTML =  "Actual Temp-EMail :<br>" + email
+    if (result.address) {
+        actualmail.innerHTML = "Actual Temp-EMail :<br>" + result.address;
     }
     else {
-        const actualmail = document.getElementById('actual-mail')
-        actualmail.innerHTML =  "No Actual Mail Found"
+        actualmail.innerHTML = "No Actual Mail Found";
     }
 });
 
 // Function to make API requests using fetch
-async function makeRequest(method, url, token, msg_id_list) {
-
-    //GET peux pas avoir de body donc :
-    if (method == 'POST') {
-
-        try {
-            const response = await fetch(url, {
-                method: method,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-MailboxToken': token
-                },
-                body: JSON.stringify(msg_id_list)
-            });
-
-            if (!response.ok) {
-                throw new Error('NOT OK');
-            }
-
-            return response.json();
-        } catch (error) {
-            console.error('ERROR : ', error);
-        }
+async function apiRequest(method, url, token, body) {
+    const headers = { 'Content-Type': 'application/json' };
+    if (token) {
+        headers['Authorization'] = 'Bearer ' + token;
     }
 
-    else {
-        try {
-            const response = await fetch(url, {
-                method: method,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-MailboxToken': token
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error('NOT OK');
-            }
-
-            return response.json();
-        } catch (error) {
-            console.error('ERROR : ', error);
-        }
+    const options = { method, headers };
+    if (body !== undefined) {
+        options.body = JSON.stringify(body);
     }
+
+    const response = await fetch(url, options);
+
+    if (!response.ok) {
+        throw new Error('NOT OK (' + response.status + ')');
+    }
+
+    return response.json();
 }
 
 
 //fonction pour envoyé des output sur le front
 function displayResult(result) {
     const apiResults = document.getElementById('apiResults');
-    apiResults.innerHTML = "<br>Inbox : <br>" + JSON.stringify(result, null, 2);
+    apiResults.innerHTML = "<br>Inbox : <br>" + result.join("<br><br>");
 }
 
 
 
 document.getElementById('create').addEventListener('click', async () => {
-    const url = 'https://www.developermail.com/api/v1/mailbox';
-    const response = await makeRequest('PUT', url);
+    const apiResults = document.getElementById('apiResults');
+    apiResults.innerHTML = "Création du mail temporaire en cours...";
 
-        // extract name and token from the response
-    const { result } = response;
-    const { name, token } = result;
+    try {
+        // récupère un nom de domaine dispo chez mail.tm (ça change de temps en temps donc on redemande a chaque creation)
+        const domains = await apiRequest('GET', 'https://api.mail.tm/domains');
+        const domain = domains['hydra:member'][0].domain;
 
-    console.log('Name:', name);
-    console.log('Token:', token);
+        // genere une adresse et un mdp bidon, on s'en fou c'est une boite jetable
+        const login = Math.random().toString(36).substring(2, 12);
+        const address = login + '@' + domain;
+        const password = Math.random().toString(36).substring(2, 15);
 
-    displayResult(name + "@developermail.com", token); 
+        await apiRequest('POST', 'https://api.mail.tm/accounts', null, { address, password });
 
-    // Store name and token in chrome storage
-    chrome.storage.sync.set({ name, token }, () => {
-        console.log('name et token dans le storage bg');
-    });
+        const tokenResponse = await apiRequest('POST', 'https://api.mail.tm/token', null, { address, password });
+        const token = tokenResponse.token;
 
-    //attendre 2s et refresh NE MARCHE PLUS AVEC MANIFEST V3
-   // setInterval(refresh_mail(name), 2000);
+        console.log('Address:', address);
+        console.log('Token:', token);
+
+        // Store address, password (pour pouvoir redemander un token si jamais il expire) et token dans le chrome storage
+        chrome.storage.sync.set({ address, password, token }, () => {
+            console.log('address, password et token dans le storage bg');
+        });
+
+        document.getElementById('actual-mail').innerHTML = "Actual Temp-EMail :<br>" + address;
+        apiResults.innerHTML = "Boite créée, clique sur Refresh pour voir les mails reçus !";
+
+    } catch (error) {
+        console.error('ERROR : ', error);
+        apiResults.innerHTML = "Impossible de créer un mail temporaire (le service est peut être down), réessaie plus tard.";
+    }
 });
 
 
 
 document.getElementById('refresh').addEventListener('click', async () => {
-    let name, token;
+    const apiResults = document.getElementById('apiResults');
+    let token;
 
-    //quand refresh recois le nom et token du chrome storage  
+    //quand refresh recois le token du chrome storage
     await new Promise(resolve => {
-        chrome.storage.sync.get(['name', 'token'], (result) => {
-            name = result.name;
+        chrome.storage.sync.get(['token'], (result) => {
             token = result.token;
             resolve();
         });
     });
-    //recup les ID des mails
 
-    //mail avec des mail recu pour test le truc
-    //name = 'w-iypmi3'
-    //token = 'B48EFCE219BBC7DB784DA36D66E1C27E914D7413'
-    
-    const url_get_msg_id = `https://www.developermail.com/api/v1/mailbox/${name}`;
-    const response_msg_id = await makeRequest('GET', url_get_msg_id, token);
+    if (!token) {
+        apiResults.innerHTML = "Aucune boite créée, clique d'abord sur Create !";
+        return;
+    }
 
-    //la response avec les id des mails
-    var msg_id_result = response_msg_id.result 
+    apiResults.innerHTML = "Chargement des mails...";
 
-    //foreach pour avoir les id de mails dans une liste snn il passent pas dans l'api se chacal
-    let msg_id_list = []
-    msg_id_result.forEach(function(msg_id) {
-        
-        msg_id_list.push(msg_id);
-    });
+    try {
+        const inbox = await apiRequest('GET', 'https://api.mail.tm/messages', token);
+        const messages = inbox['hydra:member'];
 
+        if (messages.length === 0) {
+            apiResults.innerHTML = "<br>Inbox vide pour l'instant.";
+            return;
+        }
 
-    displayResult(msg_id_list); 
+        //pour chaque mail on va chercher le contenu complet (la liste de base contient juste un aperçu)
+        let contentList = [];
+        for (const msg of messages) {
+            const full = await apiRequest('GET', 'https://api.mail.tm/messages/' + msg.id, token);
 
-    //btw refresh permet de recup les nouveaux mails 
-    const url_refresh = `https://www.developermail.com/api/v1/mailbox/${name}/messages`;
-    const response_refresh = await makeRequest('POST', url_refresh, token, msg_id_list);
+            const sender = full.from ? (full.from.name ? full.from.name + " <" + full.from.address + ">" : full.from.address) : "Inconnu";
+            const content = full.text || full.intro || "(pas de contenu texte)";
 
+            // Créez un objet contenant l'expéditeur, la date et le contenu
+            let mail = "Envoyé par : " + sender + "<br></br>" + "à : " + full.createdAt + "<br></br>" + content;
 
-    mail_result = response_refresh.result
+            // Ajoutez cet objet à la liste des mails
+            contentList.push(mail);
+        }
 
-  
+        console.log(contentList);
 
+        displayResult(contentList);
 
-    //pour enlever la merde et ne garder que la date l'expediteur et le content hehehe
-    let contentList = [];
-    mail_result.forEach(function(item) {
-        // Extrayez l'expéditeur, la date et le contenu de chaque mail
-        let sender = item.value.match(/From: (.+?)\r\n/)[0];
-        let date = item.value.match(/Date: (.+?)\r\n/)[0];
-
-        //je sépare le mail sur la dernière partie qui commence par \r\n\r\n
-        let parts = item.value.split(/\r?\n\r?\n/);
-        let content = parts.slice(1).join("\n\n").trim();
-
-        // Créez un objet contenant l'expéditeur, la date et le contenu
-        let mail = "Envoyé par : " + sender + "<br></br>" + "à : " + date + "<br></br>" + content
-
-        // Ajoutez cet objet à la liste des mails
-        contentList.push(mail);
-    });
-
-
-    console.log(contentList)
-
-    displayResult(contentList) 
-})
+    } catch (error) {
+        console.error('ERROR : ', error);
+        apiResults.innerHTML = "Impossible de récupérer les mails, le token a peut être expiré (reclique sur Create).";
+    }
+});

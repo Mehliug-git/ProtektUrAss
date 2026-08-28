@@ -1,0 +1,29 @@
+Requêtes réseau (headers HTTP, via declarativeNetRequest) :
+
+User-Agent
+Sec-Ch-Ua-Platform
+Accept
+Accept-Language
+sec-ch-ua-mobile
+JavaScript côté page (world MAIN, via applyFingerprintSpoof) :
+
+navigator.userAgent
+navigator.appVersion
+navigator.platform
+navigator.language
+navigator.languages
+navigator.hardwareConcurrency
+navigator.maxTouchPoints
+navigator.deviceMemory
+navigator.doNotTrack
+HTMLCanvasElement.prototype.toDataURL
+HTMLCanvasElement.prototype.toBlob
+CanvasRenderingContext2D.prototype.getImageData
+WebGLRenderingContext.prototype.getParameter (UNMASKED_VENDOR_WEBGL, UNMASKED_RENDERER_WEBGL, VENDOR, RENDERER)
+WebGL2RenderingContext.prototype.getParameter (idem)
+AudioBuffer.prototype.getChannelData
+AnalyserNode.prototype.getFloatFrequencyData
+RTCPeerConnection (et webkitRTCPeerConnection) — filtrage des ICE candidates de type "host"
+Autres :
+
+Cookies du site (suppression à l'activation)

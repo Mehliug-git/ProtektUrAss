@@ -16,7 +16,7 @@ function changeText() {
 
 
         chrome.storage.sync.set({'etat_switch': true})
-        comment.textContent = "ANONYME 🥷🏻";
+        comment.textContent = "ANONYME 🍆💦";
 
         //animation JS
         btn.classList.add("move");
